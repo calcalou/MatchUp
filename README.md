@@ -20,8 +20,14 @@
 
 ```https
   # git clone https://github.com/calcalou/MatchUp
-  # code .
   # npm install
+  # code .
+```
+
+#### Start Project with 
+
+```https
+  # npx expo start
 ```
 
 <h3 align="left">Languages and Tools:</h3>
