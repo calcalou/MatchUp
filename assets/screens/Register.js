@@ -135,7 +135,7 @@ function Register(props) {
   //====================== SUMBIT BUTTON NEXT ======================
   const handleSubmit = () => {
 
-    props.navigation.navigate("RegisterII"); // DEV SHUNT !!
+    //props.navigation.navigate("RegisterII"); // DEV SHUNT !!
 
     // Appeler la fonction de vérification
     //verifierOuvertureDatabase();
