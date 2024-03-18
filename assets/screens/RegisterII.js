@@ -60,6 +60,10 @@ function RegisterII(props) {
 
   //====================== SUMBIT BUTTON NEXT ======================
   const handleSubmit = () => {
+
+    props.navigation.navigate("RegisterIII"); // DEV SHUNT !!
+
+
     if (!Email) {
       handleEmailSelection(1);
       setEmailPlaceholderColor("rgba(227,119,111,1)");// set red      
@@ -68,6 +72,12 @@ function RegisterII(props) {
     if (!Password) {
       handlePasswordSelection(1);
       setPasswordPlaceholderColor("rgba(227,119,111,1)"); // set red
+    }
+
+    if (!Password || !Email) {
+      Alert.alert("Veuillez remplir tous les champs")
+    }else{
+      props.navigation.navigate("RegisterIII");
     }
   };
 
@@ -153,7 +163,6 @@ const styles = StyleSheet.create({
   backGroud: {// propriété image
     width: '100%',
     height: '100%',
-    backgroundColor: "rgba(112,98,98,0.16)",
     top: 0,
     alignItems : 'center',
   },
@@ -191,8 +200,8 @@ const styles = StyleSheet.create({
 
   ProgressBar : {
     marginTop: hp("2.5%"),
-    width : wp("45%"),
-    height : hp("3.2%"),
+    width : 163,
+    height : 25,
   },
 
   containerInput: { //container des cadres d'input
@@ -258,6 +267,7 @@ const styles = StyleSheet.create({
   TextButton: { // text du button suivant
     fontSize: 20,
     color: "rgba(65,64,64,100)",
+    fontWeight : 'bold',
   },
 
 });

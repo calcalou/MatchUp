@@ -135,7 +135,7 @@ function Register(props) {
   //====================== SUMBIT BUTTON NEXT ======================
   const handleSubmit = () => {
 
-    //props.navigation.navigate("RegisterII"); // DEV SHUNT !!
+    props.navigation.navigate("RegisterII"); // DEV SHUNT !!
 
     // Appeler la fonction de vérification
     //verifierOuvertureDatabase();
@@ -235,7 +235,8 @@ function Register(props) {
                     editable={false} // Empêcher l'édition directe du TextInput
                     value={selectedMonth ? selectedMonth : ''}
                     placeholderTextColor={MonthPlaceholderColor}
-                  />
+                    onPress={toggleModal}
+                  ></TextInput>
                 <TouchableOpacity style={styles.ButtonToggleMonthModal} onPress={toggleModal}></TouchableOpacity>
                 <Modal
                   animationType="fade"
@@ -314,7 +315,6 @@ const styles = StyleSheet.create({
   backGroud: {// propriété image
     width: '100%',
     height: '100%',
-    backgroundColor: "rgba(112,98,98,0.16)",
     top: 0,
     alignItems : 'center',
   },
@@ -352,8 +352,8 @@ const styles = StyleSheet.create({
 
   ProgressBar : {
     marginTop: hp("2.5%"),
-    width : wp("45%"),
-    height : hp("3.2%"),
+    width : 163,
+    height : 25,
   },
 
   containerInput: { //container des cadres d'input
@@ -423,6 +423,8 @@ const styles = StyleSheet.create({
   ButtonToggleMonthModal: {
     width: '100%',
     height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',    
   },
 
   MonthTextInput: {// Text input de l'affichage du mois et button clic
@@ -529,6 +531,7 @@ const styles = StyleSheet.create({
   TextButton: { // text du button suivant
     fontSize: 20,
     color: "rgba(65,64,64,100)",
+    fontWeight : 'bold',
   },
 
 });

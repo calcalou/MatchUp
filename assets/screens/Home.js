@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   startTxt: {
     color: "rgba(239,235,235,1)",
     fontSize: 21,
+    fontWeight : 'bold',
   },
 
   LoginButton: { // button vers login 
