@@ -14,37 +14,16 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import * as SQLite from 'expo-sqlite';
+
+import * as Font from "expo-font"; // import Font
+import * as SplashScreen from "expo-splash-screen"; // import Font
+import { useCallback } from "react"; // import Font
+
 
 const months = [
   "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
   "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
 ];
-
-// ================== DEF INTI DB ==================
-
-const db = SQLite.openDatabase({ name: 'DataBase.db', createFromLocation: 'default' });
-
-// ================== DB INSERT ==================
-// Fonction de vérification
-
-const verifierOuvertureDatabase = () => {
-  Alert.alert("funcion executé");
-  db.transaction(tx => {
-    tx.executeSql(
-      'SELECT * FROM sqlite_master LIMIT 1',
-      [],
-      (_, { rows }) => {
-        console.log('La base de données a été ouverte avec succès.');
-        // Si vous voulez afficher le contenu de la première ligne
-        console.log('Contenu de la première ligne :', rows.item(0));
-      },
-      (_, error) => {
-        console.error('Erreur lors de l\'ouverture de la base de données :', error);
-      }
-    );
-  });
-};
 
 // ================== DEF FONCTION LOCAL ==================
 
@@ -55,8 +34,61 @@ const BORDER_RADUIS_SEXE = 9;
 const BORDER_COLOR = "rgba(139,139,139,1)";
 const MARGIN_TOP_SPACE = 3;
 
-
 function Register(props) {
+  
+  //====================== DEF FONTS ======================
+  const [fontsLoaded, fontError] = Font.useFonts({
+
+    //====================== DEF ROBOTO ======================
+    "Roboto-Thin": require("../fonts/Roboto/Roboto-Thin.ttf"),
+    "Roboto-ThinItalic": require("../fonts/Roboto/Roboto-ThinItalic.ttf"),
+
+    "Roboto-Light": require("../fonts/Roboto/Roboto-Light.ttf"),
+    "Roboto-LightItalic": require("../fonts/Roboto/Roboto-LightItalic.ttf"),
+
+    "Roboto-Regular": require("../fonts/Roboto/Roboto-Regular.ttf"),
+    "Roboto-RegularItalic": require("../fonts/Roboto/Roboto-Italic.ttf"),
+
+    "Roboto-Medium": require("../fonts/Roboto/Roboto-Medium.ttf"),
+    "Roboto-MediumItalic": require("../fonts/Roboto/Roboto-MediumItalic.ttf"),
+
+    "Roboto-Bold": require("../fonts/Roboto/Roboto-Bold.ttf"),
+    "Roboto-BoldItalic": require("../fonts/Roboto/Roboto-BoldItalic.ttf"),
+
+    "Roboto-Black": require("../fonts/Roboto/Roboto-Black.ttf"),
+    "Roboto-BlackItalic": require("../fonts/Roboto/Roboto-BlackItalic.ttf"),
+
+    //====================== DEF POPPINS ======================
+    "Poppins-Thin": require("../fonts/Poppins/Poppins-Thin.ttf"),
+    "Poppins-ThinItalic": require("../fonts/Poppins/Poppins-ThinItalic.ttf"),
+
+    "Poppins-ExtraLight": require("../fonts/Poppins/Poppins-ExtraLight.ttf"),
+    "Poppins-ExtraLightItalic": require("../fonts/Poppins/Poppins-ExtraLightItalic.ttf"),
+
+    "Poppins-Light": require("../fonts/Poppins/Poppins-Light.ttf"),
+    "Poppins-LightItalic": require("../fonts/Poppins/Poppins-LightItalic.ttf"),
+
+    "Poppins-Regular": require("../fonts/Poppins/Poppins-Regular.ttf"),
+    "Poppins-RegularItalic": require("../fonts/Poppins/Poppins-Italic.ttf"),
+
+    "Poppins-Medium": require("../fonts/Poppins/Poppins-Medium.ttf"),
+    "Poppins-MediumItalic": require("../fonts/Poppins/Poppins-MediumItalic.ttf"),
+
+    "Poppins-SemiBold": require("../fonts/Poppins/Poppins-SemiBold.ttf"),
+    "Poppins-SemiBoldItalic": require("../fonts/Poppins/Poppins-SemiBoldItalic.ttf"),
+
+    "Poppins-Bold": require("../fonts/Poppins/Poppins-Bold.ttf"),
+    "Poppins-BoldItalic": require("../fonts/Poppins/Poppins-BoldItalic.ttf"),
+
+    "Poppins-ExtraBold": require("../fonts/Poppins/Poppins-ExtraBold.ttf"),
+    "Poppins-ExtraBoldItalic": require("../fonts/Poppins/Poppins-ExtraBoldItalic.ttf"),
+
+    "Poppins-Black": require("../fonts/Poppins/Poppins-Black.ttf"),
+    "Poppins-BlackItalic": require("../fonts/Poppins/Poppins-BlackItalic.ttf"),
+  });
+
+  const onLayoutRootView = useCallback(async () => {if (fontsLoaded || fontError) {await SplashScreen.hideAsync();}}, [fontsLoaded, fontError]);
+  if (!fontsLoaded && !fontError) {return null;}
 
   //================== DEF PSEUDO ==================
   const [Pseudo, setPseudo] = useState('');
@@ -347,7 +379,7 @@ const styles = StyleSheet.create({
     paddingLeft: wp('20%'),
     paddingRight: wp('20%'),
     textAlign : 'center',
-    fontWeight : 'bold',
+    fontFamily: "Poppins-SemiBold",
   },
 
   ProgressBar : {
@@ -382,9 +414,10 @@ const styles = StyleSheet.create({
 
   PseudoInput:{
     fontSize: 20,
+    textAlign:'center',
     width: '100%',
     height: '100%',
-    textAlign:'center',
+    fontFamily: "Poppins-Regular",
   },
 
   DateContainer: { // vontainer des cadre : jour, mois, année
@@ -407,6 +440,10 @@ const styles = StyleSheet.create({
 
   DayInput: {
     fontSize: 20,
+    textAlign:'center',
+    width: '100%',
+    height: '100%',
+    fontFamily: "Poppins-Regular",
   },
 
   MonthBox: { // cadre Mois
@@ -430,6 +467,7 @@ const styles = StyleSheet.create({
   MonthTextInput: {// Text input de l'affichage du mois et button clic
     position: 'absolute',
     fontSize: 20,
+    fontFamily: "Poppins-Regular",
   },
 
   MonthModalContainer: { // background/container du modal -> mois
@@ -462,6 +500,10 @@ const styles = StyleSheet.create({
 
   YearInput: {
     fontSize: 20,
+    textAlign:'center',
+    width: '100%',
+    height: '100%',
+    fontFamily: "Poppins-Regular",
   },
 
   SexContainer: { // container des button sexe
@@ -531,7 +573,7 @@ const styles = StyleSheet.create({
   TextButton: { // text du button suivant
     fontSize: 20,
     color: "rgba(65,64,64,100)",
-    fontWeight : 'bold',
+    fontFamily: "Poppins-Bold"
   },
 
 });
