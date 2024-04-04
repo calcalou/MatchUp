@@ -28,6 +28,16 @@ const MARGIN_TOP_SPACE = 3;
 
 function RegisterII(props) {
 
+  //====================== DEF RECEPTION VAR ======================
+
+  const { pseudo, day, month, year, gender } = props.route.params;
+
+  const [Pseudo, setPseudo] = useState(pseudo);
+  const [Day, setDay] = useState(day);
+  const [selectedMonth, setSelectedMonth] = useState(month);
+  const [Year, setYear] = useState(year);
+  const [Gender, setGender] = useState(gender);
+
   //====================== DEF FONTS ======================
   const [fontsLoaded, fontError] = Font.useFonts({
 
@@ -118,8 +128,7 @@ function RegisterII(props) {
   //====================== SUMBIT BUTTON NEXT ======================
   const handleSubmit = () => {
 
-    props.navigation.navigate("RegisterIII"); // DEV SHUNT !!
-
+    //props.navigation.navigate("RegisterIII"); // DEV SHUNT !!
 
     if (!Email) {
       handleEmailSelection(1);
@@ -134,7 +143,16 @@ function RegisterII(props) {
     if (!Password || !Email) {
       Alert.alert("Veuillez remplir tous les champs")
     }else{
-      props.navigation.navigate("RegisterIII");
+      // envoie des données vers autre pages
+      props.navigation.navigate("RegisterIII", {
+        pseudo: Pseudo,
+        day: Day,
+        month: selectedMonth,
+        year: Year,
+        gender: Gender,
+        email : Email,
+        password : Password,
+      });
     }
   };
 

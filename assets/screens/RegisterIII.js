@@ -21,6 +21,18 @@ import { useCallback } from "react"; // import Font
 
 function RegisterIII(props) {
 
+  //====================== DEF RECEPTION VAR ======================
+
+  const { pseudo, day, month, year, gender, email, password } = props.route.params;
+
+  const [Pseudo, setPseudo] = useState(pseudo);
+  const [Day, setDay] = useState(day);
+  const [selectedMonth, setSelectedMonth] = useState(month);
+  const [Year, setYear] = useState(year);
+  const [Gender, setGender] = useState(gender);
+  const [Email, setEmail] = useState(email);
+  const [Password, setPassword] = useState(password);
+
   //====================== DEF FONTS ======================
   const [fontsLoaded, fontError] = Font.useFonts({
 
@@ -103,12 +115,31 @@ function RegisterIII(props) {
 
   //====================== SUMBIT BUTTON IGNORE ======================
   const IgnoreSubmit = () => {
-    props.navigation.navigate("RegisterIV")
+
+    Alert.alert(Pseudo);
+
+    props.navigation.navigate("RegisterIV", {
+      pseudo: Pseudo,
+      day: Day,
+      month: selectedMonth,
+      year: Year,
+      gender: Gender,
+      email : Email,
+      password : Password,
+    });
   };
 
   //====================== SUMBIT BUTTON NEXT ======================
   const handleSubmit = () => {
-
+    props.navigation.navigate("RegisterIV", {
+      pseudo: Pseudo,
+      day: Day,
+      month: selectedMonth,
+      year: Year,
+      gender: Gender,
+      email : Email,
+      password : Password,
+    });
   };
 
   return (

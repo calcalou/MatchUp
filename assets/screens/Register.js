@@ -167,7 +167,7 @@ function Register(props) {
   //====================== SUMBIT BUTTON NEXT ======================
   const handleSubmit = () => {
 
-    props.navigation.navigate("RegisterII"); // DEV SHUNT !!
+    //props.navigation.navigate("RegisterII"); // DEV SHUNT !!
 
     // Appeler la fonction de vérification
     //verifierOuvertureDatabase();
@@ -209,7 +209,16 @@ function Register(props) {
       Alert.alert("Veuillez séléctionner votre genre");
 
     } else { 
-          props.navigation.navigate("RegisterII");
+          //props.navigation.navigate("RegisterII");
+          
+          // envoie des variable a l'autre page
+          props.navigation.navigate("RegisterII", {
+            pseudo: Pseudo,
+            day: Day,
+            month: selectedMonth,
+            year: Year,
+            gender: gender,
+          });
     }
   };
 
