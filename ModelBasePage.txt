@@ -86,9 +86,8 @@ function Menu(props) {
 
   return (
       <View style={styles.container}>
-        <View style={styles.BotBarContainer}>
+        
 
-        </View>
       </View>
   );
 };
@@ -96,17 +95,6 @@ function Menu(props) {
 const styles = StyleSheet.create({
   container: {// modif container ALL
     flex: 1,
-    width: hp("100%"),
-    height: hp("100%"),
-  },
-
-  BotBarContainer: {
-    flex: 1,
-    height: 1,
-    width : 100,
-    justifyContent: 'flex-end',
-    backgroundColor: "red",
-    //backgroundColor: "rgba(235,235,235,1)",
   },
 
 

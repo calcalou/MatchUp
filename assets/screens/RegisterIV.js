@@ -5,13 +5,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  Text,
-  Alert,
-  Modal,
-  FlatList,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Button,
+  Text
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -158,8 +152,8 @@ const styles = StyleSheet.create({
 
   FlecheNext: { // 416 X 413
     alignSelf: 'flex-end', 
-    width: 85,
-    height: 82.5,
+    width: 76.5,
+    height: 74.25,
     marginRight: 25,
     marginBottom: 25,
   },
