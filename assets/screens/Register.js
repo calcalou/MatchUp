@@ -173,7 +173,7 @@ function Register(props) {
     //verifierOuvertureDatabase();
 
     if (gender === 0) {// gender TEST
-      //Alert.alert('Sélectionnez un genre', 'Veuillez sélectionner un genre.');
+      Alert.alert('Sélectionnez un genre', 'Veuillez sélectionner un genre.');
     } else if (gender === 1) {// si homme 
       
       //Alert.alert('Homme');
@@ -209,15 +209,13 @@ function Register(props) {
       Alert.alert("Veuillez séléctionner votre genre");
 
     } else { 
-          //props.navigation.navigate("RegisterII");
-          
           // envoie des variable a l'autre page
-          props.navigation.navigate("RegisterII", {
+           props.navigation.navigate("RegisterII", {
             pseudo: Pseudo,
             day: Day,
             month: selectedMonth,
             year: Year,
-            gender: gender,
+            gender: gender, 
           });
     }
   };

@@ -7,7 +7,7 @@ const App = () => {
 
   const handleSignUp = async () => {
     try {
-      const response = await fetch('http://www.discord.re/connexion.php', {
+      const response = await fetch('http://www.discord.re/inscriptionform.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

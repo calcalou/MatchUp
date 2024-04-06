@@ -16,13 +16,13 @@ import { useCallback } from "react"; // import Font
 
 const RegisterIV = (props) => {
 
-  //====================== DEF RECEPTION VAR ======================
+  //====================== RECEPTION VAR INFO ======================
 
   const { pseudo, day, month, year, gender, email, password } = props.route.params;
 
   const [Pseudo, setPseudo] = useState(pseudo);
   const [Day, setDay] = useState(day);
-  const [selectedMonth, setSelectedMonth] = useState(month);
+  const [Month, setMonth] = useState(month);
   const [Year, setYear] = useState(year);
   const [Gender, setGender] = useState(gender);
   const [Email, setEmail] = useState(email);
@@ -83,13 +83,34 @@ const RegisterIV = (props) => {
   if (!fontsLoaded && !fontError) {return null;}
 
   //====================== SUMBIT BUTTON NEXT ======================
-  const nextHandle = () => {
-    Alert.alert(Pseudo);
-    Alert.alert(Day);
-    Alert.alert(Gender);
-    //props.navigation.navigate("Login");
-  };
+  const nextHandle = async () => {
+    
+    console.log(Month);
 
+    try {
+      const response = await fetch('http://www.discord.re/inscriptionform.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ Password, Pseudo, Day, Month, Year, Gender, Email}),  
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        //Alert.alert('Success', 'Registration successful');
+        props.navigation.navigate("Login");
+      } else {
+        Alert.alert('Error', data.message || 'An error occurred');
+        props.navigation.navigate("Home");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'An error occurred. Please try again later.');
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <ImageBackground //Fond d'écran
@@ -99,7 +120,7 @@ const RegisterIV = (props) => {
         imageStyle={styles.backGroud_imageStyle}>
         
         <View style={styles.TextContainer}>
-          <Text style={styles.LigneI}>Bienvenue,</Text>
+          <Text style={styles.LigneI}>Bienvenue, {pseudo}</Text>
           <Text style={styles.LigneII}>ton compte a bien</Text>
           <Text style={styles.LigneIII}>été créé !</Text>
         </View>
@@ -112,9 +133,6 @@ const RegisterIV = (props) => {
           ></Image>
         </TouchableOpacity>
       </View>
-
-
-
       </ImageBackground> 
     </View>
   );

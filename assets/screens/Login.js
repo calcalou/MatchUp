@@ -25,7 +25,6 @@ const BORDER_RADUIS = 5;
 const BORDER_COLOR = "rgba(139,139,139,1)";
 const MARGIN_TOP_SPACE = 3;
 
-
 function RegisterII(props) {
 
   //====================== DEF FONTS ======================
@@ -116,9 +115,9 @@ function RegisterII(props) {
   };
 
   //====================== SUMBIT BUTTON NEXT ======================
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
-    props.navigation.navigate("Menu"); // DEV SHUNT !!
+    //props.navigation.navigate("Menu"); // DEV SHUNT !!
 
 
     if (!Email) {
@@ -134,10 +133,31 @@ function RegisterII(props) {
     if (!Password || !Email) {
       Alert.alert("Veuillez remplir tous les champs")
     }else{
-      props.navigation.navigate("Menu");
+
+    try {
+      const response = await fetch('http://www.discord.re/Login.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        
+        body: JSON.stringify({ Email, Password }),  
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        Alert.alert('Success', data.message);
+        // Navigate to appropriate screen after successful login
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'An error occurred. Please try again later.');
+    }  
     }
   };
-
 
   return (
     <TouchableWithoutFeedback onPress={handlePressOutsideKeyboard} /* Fonction dismiss keyboard */>

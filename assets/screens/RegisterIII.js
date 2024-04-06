@@ -116,8 +116,6 @@ function RegisterIII(props) {
   //====================== SUMBIT BUTTON IGNORE ======================
   const IgnoreSubmit = () => {
 
-    Alert.alert(Pseudo);
-
     props.navigation.navigate("RegisterIV", {
       pseudo: Pseudo,
       day: Day,
