@@ -85,30 +85,48 @@ function Menu(props) {
 
 
   return (
-      <View style={styles.container}>
-        <View style={styles.BotBarContainer}>
+    <View style={styles.container}>
+      <View style={styles.content}>
+
+      </View>
+
+      <View style={styles.menuBar}>
+        <View style={styles.BBarCircle}>
 
         </View>
       </View>
-  );
+    </View>
+);
 };
 
 const styles = StyleSheet.create({
-  container: {// modif container ALL
-    flex: 1,
-    width: hp("100%"),
-    height: hp("100%"),
-  },
+container: {
+  flex: 1,
+  backgroundColor: "#fff",
+  position: "relative", // Pour contenir la barre de menu en bas
+},
+content: {
+  flex: 1,
+  // Styles pour le contenu principal (au-dessus de la barre de menu)
+},
+menuBar: {
+  position: "absolute",
+  bottom: 0, // Aligne la barre de menu en bas de l'écran
+  left: 0,
+  right: 0,
+  height: hp("10%"), // Hauteur de la barre de menu
+  backgroundColor: "rgba(65,65,89,1)", // Couleur de fond de la barre de menu
+  alignItems: 'center',
+},
 
-  BotBarContainer: {
-    flex: 1,
-    height: 1,
-    width : 100,
-    justifyContent: 'flex-end',
-    backgroundColor: "red",
-    //backgroundColor: "rgba(235,235,235,1)",
-  },
-
+BBarCircle: {
+  position: "absolute",
+  bottom: hp("2.7%"), // Aligne la barre de menu en bas de l'écran
+  width: hp("10%"),
+  height: hp("10%"), // Hauteur de la barre de menu
+  borderRadius: hp("5%"),
+  backgroundColor: "rgba(65,65,89,1)", // Couleur de fond de la barre de menu
+},
 
 });
 

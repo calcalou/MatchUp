@@ -173,7 +173,7 @@ function Register(props) {
     //verifierOuvertureDatabase();
 
     if (gender === 0) {// gender TEST
-      Alert.alert('Sélectionnez un genre', 'Veuillez sélectionner un genre.');
+      //Alert.alert('Sélectionnez un genre', 'Veuillez sélectionner un genre.');
     } else if (gender === 1) {// si homme 
       
       //Alert.alert('Homme');

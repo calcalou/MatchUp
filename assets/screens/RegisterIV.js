@@ -84,9 +84,7 @@ const RegisterIV = (props) => {
 
   //====================== SUMBIT BUTTON NEXT ======================
   const nextHandle = async () => {
-    
-    console.log(Month);
-
+    // ====================== CONNEXION FORM PHP ======================
     try {
       const response = await fetch('http://www.discord.re/inscriptionform.php', {
         method: 'POST',
@@ -107,7 +105,7 @@ const RegisterIV = (props) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred. Please try again later.');
+      Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
     }
   };
   

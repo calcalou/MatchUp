@@ -126,7 +126,7 @@ function RegisterII(props) {
   };
 
   //====================== SUMBIT BUTTON NEXT ======================
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
     //props.navigation.navigate("RegisterIII"); // DEV SHUNT !!
 
@@ -143,16 +143,40 @@ function RegisterII(props) {
     if (!Password || !Email) {
       Alert.alert("Veuillez remplir tous les champs")
     }else{
-      // envoie des données vers autre pages
-      props.navigation.navigate("RegisterIII", {
-        pseudo: Pseudo,
-        day: Day,
-        month: selectedMonth,
-        year: Year,
-        gender: Gender,
-        email : Email,
-        password : Password,
-      });
+
+      // ====================== CONNEXION FORM PHP ======================
+      try {
+        const response = await fetch('http://www.discord.re/verifemailstored.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({Email}),  
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // envoie des données vers autre pages
+          props.navigation.navigate("RegisterIII", {
+            pseudo: Pseudo,
+            day: Day,
+            month: selectedMonth,
+            year: Year,
+            gender: Gender,
+            email : Email,
+            password : Password,
+          });
+        } else {
+          Alert.alert('Error', data.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
+      }
+      
+      
+
     }
   };
 

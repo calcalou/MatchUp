@@ -134,6 +134,7 @@ function RegisterII(props) {
       Alert.alert("Veuillez remplir tous les champs")
     }else{
 
+    // ====================== CONNEXION FORM PHP ======================
     try {
       const response = await fetch('http://www.discord.re/Login.php', {
         method: 'POST',
@@ -146,17 +147,19 @@ function RegisterII(props) {
 
       const data = await response.json();
 
+
       if (data.success) {
-        Alert.alert('Success', data.message);
-        // Navigate to appropriate screen after successful login
+        // Alert.alert('Success', data.message);
+        props.navigation.navigate("Menu");
       } else {
         Alert.alert('Error', data.message);
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred. Please try again later.');
+      Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
     }  
     }
+
   };
 
   return (
