@@ -1,67 +1,50 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, Button } from 'react-native';
+import Swiper from 'react-native-swiper';
 
-const App = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const MySwiper = () => {
+  const swiperRef = useRef(null);
 
-  const handleSignUp = async () => {
-    try {
-      const response = await fetch('http://www.discord.re/inscriptionform.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),                     
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        Alert.alert('Success', 'Registration successful');
-      } else {
-        Alert.alert('Error', data.message || 'An error occurred');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred. Please try again later.');
+  const goToPage = (index) => {
+    if (swiperRef.current && swiperRef.current.state.index !== index) {
+      swiperRef.current.scrollBy(index - swiperRef.current.state.index);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={text => setUsername(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={text => setPassword(text)}
-      />
-      <Button title="Sign Up" onPress={handleSignUp} />
+    <View style={{ flex: 1 }}>
+      <Swiper
+        ref={swiperRef}
+        showsButtons={false}
+        showsPagination={false}
+        loop={false}
+        index={3}
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'skyblue' }}>
+          <Text>Page 1</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightgreen' }}>
+          <Text>Page 2</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'salmon' }}>
+          <Text>Page 3</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightyellow' }}>
+          <Text>Page 4</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightcoral' }}>
+          <Text>Page 5</Text>
+        </View>
+      </Swiper>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', paddingBottom: 20 }}>
+        <Button title="Page 1" onPress={() => goToPage(0)} />
+        <Button title="Page 2" onPress={() => goToPage(1)} />
+        <Button title="Page 3" onPress={() => goToPage(2)} />
+        <Button title="Page 4" onPress={() => goToPage(3)} />
+        <Button title="Page 5" onPress={() => goToPage(4)} />
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    width: '80%',
-    marginVertical: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-  },
-});
-
-export default App;
+export default MySwiper;
