@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -21,23 +22,31 @@ import Swiper from 'react-native-swiper';
 
 // ================== DEF FONCTION LOCAL ==================
 
-// ================== DEF STYLE CONST ==================
-const BORDER_WIDTH = 0.4;
-const BORDER_RADUIS = 5;
-const BORDER_COLOR = "rgba(139,139,139,1)";
-const MARGIN_TOP_SPACE = 3;
-
+// ================== DEF CONST ==================
+const IndexMenu = 2; // def n° de page affiché après chargement
 
 function Menu(props) {
 
   //====================== DEF SWIPER ======================
   const swiperRef = useRef(null);
-
   const goToPage = (index) => {
     if (swiperRef.current && swiperRef.current.state.index !== index) {
       swiperRef.current.scrollBy(index - swiperRef.current.state.index);
     }
   };
+
+  const [activePage, setActivePage] = useState(IndexMenu);
+  const [GraphicactivePage, setGraphicactivePage] = useState(IndexMenu);
+
+  const handleIndexChanged = (index) => {
+    setActivePage(index);
+    setGraphicactivePage(index);// a la fin du scroll, affiche le marqueur de page 
+  };
+
+  const onScrollBeginDrag = () => {
+    setGraphicactivePage(5); // au début du scroll, enlève le marqueur de page 
+  }
+
 
   //====================== DEF FONTS ======================
   const [fontsLoaded, fontError] = Font.useFonts({
@@ -95,22 +104,27 @@ function Menu(props) {
 
   //====================== HANDLE BUTTON G1 ======================
   const G1 = () => {
+    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
     goToPage(0);
   }
   //====================== HANDLE BUTTON G2 ======================
   const G2 = () => {
+    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
     goToPage(1);
   }
   //====================== HANDLE BUTTON CENTRE ======================
   const BTNcentre = () => {
+    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
     goToPage(2);
   }
   //====================== HANDLE BUTTON R1 ======================
   const R1 = () => {
+    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
     goToPage(3);
   }
   //====================== HANDLE BUTTON R2 ======================
   const R2 = () => {
+    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
     goToPage(4);
   }
 
@@ -123,7 +137,10 @@ function Menu(props) {
         showsButtons={false}
         showsPagination={false}
         loop={false}
-        index={2}
+        index={activePage}
+        onIndexChanged={handleIndexChanged}
+        onScrollBeginDrag={onScrollBeginDrag}
+        bounces={true}
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'skyblue' }}>
           <Text>Page ACCEUIL</Text>
@@ -144,22 +161,22 @@ function Menu(props) {
       {/* //====================== SWIPER DEF END ====================== */}
       {/* //====================== BOTTOM BAR ====================== */}
 
-      <View style={styles.BBarCircle}></View>
+      <View style={[styles.BBarCircle , GraphicactivePage === 2 && styles.centerement]}></View>
       <View style={styles.menuBar}>
-          <TouchableOpacity style={[styles.left1element, styles.element]} onPress={G1}>
-            <Image source={require("../images/AcceuilIMG.png")} style={styles.IMGg1} ></Image>
+          <TouchableOpacity style={[styles.element, GraphicactivePage === 0 && styles.left1element]} onPress={G1}>
+            <Image source={require("../images/AcceuilIMG.png")} style={styles.IMGbutton} ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.left2ement, styles.element]} onPress={G2}>
-            <Image source={require("../images/EquipeIMG.png")} style={styles.IMGg1} ></Image>
+          <TouchableOpacity style={[styles.element, GraphicactivePage === 1 && styles.left2ement]} onPress={G2}>
+            <Image source={require("../images/EquipeIMG.png")} style={styles.IMGbutton} ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.centerement, styles.element]} onPress={BTNcentre}>
-            <Image source={require("../images/BasketIMG.png")} style={styles.IMGg2} ></Image>
+          <TouchableOpacity style={[styles.element]} onPress={BTNcentre}>
+            <Image source={require("../images/BasketIMG.png")} style={styles.IMGcenter} ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.right1ement, styles.element]} onPress={R1}>
-          < Image source={require("../images/CalendarIMG.png")} style={styles.IMGg1} ></Image>
+          <TouchableOpacity style={[styles.element, GraphicactivePage === 3 && styles.right1ement]} onPress={R1}>
+          < Image source={require("../images/CalendarIMG.png")} style={styles.IMGbutton} ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.right2ement, styles.element]} onPress={R2}>
-            < Image source={require("../images/ClassementIMG.png")} style={styles.IMGg1} ></Image>
+          <TouchableOpacity style={[styles.element, GraphicactivePage === 4 && styles.right2ement]} onPress={R2}>
+            < Image source={require("../images/ClassementIMG.png")} style={styles.IMGbutton} ></Image>
           </TouchableOpacity>
       </View>
     </View>
@@ -173,9 +190,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     position: "relative",
   },
+
   content: {
     flex: 1,
   },
+
   menuBar: {
     position: "absolute",
     bottom: 0,
@@ -185,8 +204,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(65,65,89,1)",
     flexDirection: 'row',
     alignItems: 'center',
-
   },
+
   BBarCircle: {
     position: "absolute",
     bottom: hp("2.7%"),
@@ -199,47 +218,55 @@ const styles = StyleSheet.create({
   },
 
   element: {
-    color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
     height: hp("10%"),
     width: wp("20%"),
     justifyContent: "center",
     alignItems: "center",
+    borderTopWidth: 5,
+    borderTopColor: "rgba(65,65,89,1)",
   },
 
-  IMGg1: {
-    width: "62%",
+  IMGbutton: {
+    width: "58%",
     height: "65%",
     bottom: "8%",
   },
 
-  IMGg2: {
+  IMGcenter: {
     width: "62%",
-    height: "89%",
-    bottom: "24%",
+    height: "100%",
+    bottom: "26%",
   },
 
   left1element: {
-    //backgroundColor: "red",
-
+    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
+    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
+    height: "100%",
   },
 
   left2ement: {
-    //backgroundColor: "orange",
+    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
+    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
+    height: "100%",
   },
   centerement: {
-    //backgroundColor: "green",
+    borderColor: "orange", // Couleur de la partie supérieure de la bordure
+    borderWidth: hp("0.7%"), // Épaisseur de la bordure
   },
 
   right1ement: {
-    //backgroundColor: "blue",
+    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
+    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
+    height: "100%",
   },
 
   right2ement: {
-    //backgroundColor: "violet",
+    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
+    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
+    height: "100%",
   },
-
 
 });
 

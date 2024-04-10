@@ -174,9 +174,6 @@ function RegisterII(props) {
         console.error('Error:', error);
         Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
       }
-      
-      
-
     }
   };
 
