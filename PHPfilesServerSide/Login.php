@@ -5,8 +5,6 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 include('config.php');
 
-
-
 $response = array("success" => false, "message" => "An error occurred");
 
 $conn = new mysqli($servername, $username, $password, $database);

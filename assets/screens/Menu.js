@@ -10,9 +10,11 @@ import {
   Keyboard,
   Alert,
   ActivityIndicator,
+  Animated,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import * as Font from "expo-font"; // import Font
 import * as SplashScreen from "expo-splash-screen"; // import Font
@@ -23,10 +25,13 @@ import Swiper from 'react-native-swiper';
 // ================== DEF FONCTION LOCAL ==================
 
 // ================== DEF CONST ==================
-const IndexMenu = 2; // def n° de page affiché après chargement
+const IndexMenu = 1; // def n° de page affiché après chargement
 
 function Menu(props) {
 
+  //====================== DEF FADE ANIM ======================
+  
+  
   //====================== DEF SWIPER ======================
   const swiperRef = useRef(null);
   const goToPage = (index) => {
@@ -41,12 +46,14 @@ function Menu(props) {
   const handleIndexChanged = (index) => {
     setActivePage(index);
     setGraphicactivePage(index);// a la fin du scroll, affiche le marqueur de page 
+    console.log(index);
+
   };
 
   const onScrollBeginDrag = () => {
-    setGraphicactivePage(5); // au début du scroll, enlève le marqueur de page 
-  }
+    setGraphicactivePage(5); // au début du scroll, enlève le marqueur de page
 
+  }
 
   //====================== DEF FONTS ======================
   const [fontsLoaded, fontError] = Font.useFonts({
@@ -103,31 +110,34 @@ function Menu(props) {
   if (!fontsLoaded && !fontError) {return null;}
 
   //====================== HANDLE BUTTON G1 ======================
-  const G1 = () => {
-    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
-    goToPage(0);
+  const ProfileHandle = () => {
+    if (GraphicactivePage == 0 ) {
+      
+    }else{
+      setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
+      goToPage(0);
+    }
   }
   //====================== HANDLE BUTTON G2 ======================
-  const G2 = () => {
-    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
-    goToPage(1);
+  const TournoisHandle = () => {
+    if (GraphicactivePage == 1) {
+      
+    }else{
+      setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
+      goToPage(1);
+    }
   }
   //====================== HANDLE BUTTON CENTRE ======================
-  const BTNcentre = () => {
-    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
-    goToPage(2);
-  }
-  //====================== HANDLE BUTTON R1 ======================
-  const R1 = () => {
-    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
-    goToPage(3);
-  }
-  //====================== HANDLE BUTTON R2 ======================
-  const R2 = () => {
-    setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
-    goToPage(4);
+  const EquipeHandle = () => {
+    if (GraphicactivePage == 2) {
+      
+    }else{
+      setGraphicactivePage(5); // au début du clic button, enlève le marqueur de page 
+      goToPage(2);
+    } 
   }
 
+// Profile joueur / tournois / équipe
   return (
     <View style={styles.container}>
 
@@ -143,43 +153,59 @@ function Menu(props) {
         bounces={true}
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'skyblue' }}>
-          <Text>Page ACCEUIL</Text>
+          <Text>Page Profile</Text>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightgreen' }}>
-          <Text>Page EQUIPE</Text>
+          <Text>Page Tournois</Text>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'salmon' }}>
-          <Text>Page MATCHS</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightyellow' }}>
-          <Text>Page CALENDAR</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightcoral' }}>
-          <Text>Page CLASSEMENT</Text>
+          <Text>Page Equipe</Text>
         </View>
       </Swiper>
       {/* //====================== SWIPER DEF END ====================== */}
       {/* //====================== BOTTOM BAR ====================== */}
 
-      <View style={[styles.BBarCircle , GraphicactivePage === 2 && styles.centerement]}></View>
       <View style={styles.menuBar}>
-          <TouchableOpacity style={[styles.element, GraphicactivePage === 0 && styles.left1element]} onPress={G1}>
-            <Image source={require("../images/AcceuilIMG.png")} style={styles.IMGbutton} ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.element, GraphicactivePage === 1 && styles.left2ement]} onPress={G2}>
-            <Image source={require("../images/EquipeIMG.png")} style={styles.IMGbutton} ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.element]} onPress={BTNcentre}>
-            <Image source={require("../images/BasketIMG.png")} style={styles.IMGcenter} ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.element, GraphicactivePage === 3 && styles.right1ement]} onPress={R1}>
-          < Image source={require("../images/CalendarIMG.png")} style={styles.IMGbutton} ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.element, GraphicactivePage === 4 && styles.right2ement]} onPress={R2}>
-            < Image source={require("../images/ClassementIMG.png")} style={styles.IMGbutton} ></Image>
-          </TouchableOpacity>
+
+        <View style={styles.ProfileContainer}>
+          
+            <LinearGradient  
+            colors={GraphicactivePage !== 0 ? ['#FFFFFF', '#FFFFFF'] : ['#FFED8C', '#E5A62A']}
+            style={styles.ButtonCircle}>
+              <TouchableOpacity onPress={ProfileHandle} style={styles.ButtonZone}>
+                <Image source={require("../images/acceuilLOGO.png")} style={styles.ButtonIMG}></Image>
+              </TouchableOpacity>
+            </LinearGradient>
+          
+        </View>
+
+        <View style={styles.TournoisContainer}>
+
+          <LinearGradient  
+            colors={GraphicactivePage !== 1 ? ['#FFFFFF', '#FFFFFF'] : ['#FFED8C', '#E5A62A']}
+            style={styles.ButtonCircle}>
+            <TouchableOpacity onPress={TournoisHandle} style={styles.ButtonZone}>
+                <Image source={require("../images/rencontreLOGO.png")} style={styles.ButtonIMG}></Image>
+            </TouchableOpacity>
+          </LinearGradient>   
+
+        </View>
+
+        <View style={styles.EquipeContainer}>
+
+          <LinearGradient  
+            colors={GraphicactivePage !== 2 ? ['#FFFFFF', '#FFFFFF'] : ['#FFED8C', '#E5A62A']}
+            style={styles.ButtonCircle}>
+            <TouchableOpacity onPress={EquipeHandle} style={styles.ButtonZone}>
+                <Image source={require("../images/equipeLOGO.png")} style={styles.ButtonIMG}></Image>
+            </TouchableOpacity>
+          </LinearGradient>
+
+        </View>
+
       </View>
-    </View>
+      
+    </View>//Fin container
     
   );
 }
@@ -191,81 +217,63 @@ const styles = StyleSheet.create({
     position: "relative",
   },
 
-  content: {
-    flex: 1,
-  },
-
   menuBar: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: hp("10%"),
+    height: hp("7%"),
     backgroundColor: "rgba(65,65,89,1)",
     flexDirection: 'row',
     alignItems: 'center',
   },
 
-  BBarCircle: {
-    position: "absolute",
-    bottom: hp("2.7%"),
-    width: hp("10%"),
+  ProfileContainer:  {
+    backgroundColor: 'white',
     height: hp("10%"),
-    borderRadius: hp("5%"),
-    backgroundColor: "rgba(65,65,89,1)",
-    left: "50%", // Centrer horizontalement
-    marginLeft: -hp("5%"), // Déplacer de moitié de la largeur pour centrer correctement
-  },
-
-  element: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    height: hp("10%"),
-    width: wp("20%"),
+    width: ("33.33%"),
     justifyContent: "center",
     alignItems: "center",
-    borderTopWidth: 5,
-    borderTopColor: "rgba(65,65,89,1)",
   },
 
-  IMGbutton: {
-    width: "58%",
-    height: "65%",
-    bottom: "8%",
+  TournoisContainer: {
+    backgroundColor: 'white',
+    height: hp("10%"),
+    width: ("33.33%"),
+    justifyContent: "center",
+    alignItems: "center",
   },
 
-  IMGcenter: {
-    width: "62%",
-    height: "100%",
-    bottom: "26%",
+  EquipeContainer: {
+    backgroundColor: 'white',
+    height: hp("10%"),
+    width: ("33.33%"),
+    justifyContent: "center",
+    alignItems: "center",
   },
 
-  left1element: {
-    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
-    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
-    height: "100%",
+  ButtonCircle : {
+    backgroundColor: "white",
+    height: wp("17%"),
+    width: wp("17%"),
+    borderRadius: wp("8.5%"),
+    bottom: hp("3.5%"),
+    justifyContent: "center",
+    alignItems: "center",
   },
 
-  left2ement: {
-    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
-    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
-    height: "100%",
-  },
-  centerement: {
-    borderColor: "orange", // Couleur de la partie supérieure de la bordure
-    borderWidth: hp("0.7%"), // Épaisseur de la bordure
+  ButtonIMG: {
+    width : wp("10%"),
+    height : wp("10%"),
   },
 
-  right1ement: {
-    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
-    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
-    height: "100%",
-  },
-
-  right2ement: {
-    borderTopWidth: 5, // Modifie la largeur de la bordure supérieure
-    borderTopColor: "rgba(253,196,51,1)", // Couleur de la bordure supérieure
-    height: "100%",
+  ButtonZone: {
+    width : wp("14%"),
+    height: wp("14%"),
+    borderRadius: wp("7%"),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
   },
 
 });

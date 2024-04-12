@@ -1,50 +1,85 @@
-import React, { useRef } from 'react';
-import { View, Text, Button } from 'react-native';
-import Swiper from 'react-native-swiper';
+import React, { useState } from 'react';
+import { Animated, Easing, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const MySwiper = () => {
-  const swiperRef = useRef(null);
+export default function App() {
+  const [showButtons, setShowButtons] = useState(false);
+  const opacity = new Animated.Value(0);
 
-  const goToPage = (index) => {
-    if (swiperRef.current && swiperRef.current.state.index !== index) {
-      swiperRef.current.scrollBy(index - swiperRef.current.state.index);
+  const fadeIn = () => {
+    setShowButtons(true);
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: 500,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => setShowButtons(false));
+  };
+
+  const toggleButtons = () => {
+    if (!showButtons) {
+      fadeIn();
+    } else {
+      fadeOut();
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Swiper
-        ref={swiperRef}
-        showsButtons={false}
-        showsPagination={false}
-        loop={false}
-        index={3}
-      >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'skyblue' }}>
-          <Text>Page 1</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightgreen' }}>
-          <Text>Page 2</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'salmon' }}>
-          <Text>Page 3</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightyellow' }}>
-          <Text>Page 4</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightcoral' }}>
-          <Text>Page 5</Text>
-        </View>
-      </Swiper>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', paddingBottom: 20 }}>
-        <Button title="Page 1" onPress={() => goToPage(0)} />
-        <Button title="Page 2" onPress={() => goToPage(1)} />
-        <Button title="Page 3" onPress={() => goToPage(2)} />
-        <Button title="Page 4" onPress={() => goToPage(3)} />
-        <Button title="Page 5" onPress={() => goToPage(4)} />
-      </View>
+    <View style={styles.container}>
+      {showButtons && (
+        <Animated.View style={[styles.buttonContainer, { opacity }]}>
+          <TouchableOpacity style={styles.smallButton}>
+            <Text style={styles.buttonText}>Button 1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton}>
+            <Text style={styles.buttonText}>Button 2</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton}>
+            <Text style={styles.buttonText}>Button 3</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      )}
+      <TouchableOpacity style={styles.mainButton} onPress={toggleButtons}>
+        <Text style={styles.buttonText}>Main Button</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
-export default MySwiper;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    position: 'absolute',
+    top: 100,
+    width: '100%',
+  },
+  mainButton: {
+    backgroundColor: 'orange',
+    padding: 15,
+    borderRadius: 10,
+  },
+  smallButton: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
+  
