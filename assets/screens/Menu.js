@@ -11,6 +11,9 @@ import {
   Alert,
   ActivityIndicator,
   Animated,
+  Button,
+  ScrollView,
+  Dimensions,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -21,6 +24,7 @@ import * as SplashScreen from "expo-splash-screen"; // import Font
 import { useCallback } from "react"; // import Font
 
 import Swiper from 'react-native-swiper';
+import { InterfaceOrientation } from "react-native-reanimated";
 
 // ================== DEF FONCTION LOCAL ==================
 
@@ -29,9 +33,30 @@ const IndexMenu = 1; // def n° de page affiché après chargement
 
 function Menu(props) {
 
-  //====================== DEF FADE ANIM ======================
+  //====================== DEF PROFILE ======================
+
+  // === DEF INFO/PROFILE BUTTON ===
+  const [infomatchselected, setinfomatchselected] = useState(1);
+
+  const ProfileInfoHandle = (input) => {
+    setinfomatchselected(1);
+    setViewNumber(1);
+  };
   
-  
+  const ProfileMatchHandle = (input) => {
+    setinfomatchselected(2);
+    setViewNumber(2);
+  };
+
+  // === set des views du body profile === 
+
+  // Initialisez l'état pour gérer quelle vue fille est affichée (1 ou 2)
+  const [viewNumber, setViewNumber] = useState(1);
+
+  // === DEF SCROLL VIEW ===
+  const viewWidth = Dimensions.get('window').width - wp("15%");
+
+
   //====================== DEF SWIPER ======================
   const swiperRef = useRef(null);
   const goToPage = (index) => {
@@ -46,8 +71,6 @@ function Menu(props) {
   const handleIndexChanged = (index) => {
     setActivePage(index);
     setGraphicactivePage(index);// a la fin du scroll, affiche le marqueur de page 
-    console.log(index);
-
   };
 
   const onScrollBeginDrag = () => {
@@ -150,17 +173,98 @@ function Menu(props) {
         index={activePage}
         onIndexChanged={handleIndexChanged}
         onScrollBeginDrag={onScrollBeginDrag}
-        bounces={true}
+        bounces={false}
       >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'skyblue' }}>
-          <Text>Page Profile</Text>
-        </View>
+
+        <View style={styles.PageProfile}>
+          <View style={styles.PagePTopContainer}>
+          </View>
+
+          {/* Two button switch : */}
+          <View style={styles.PagePButtonInfoMatch}>
+            <TouchableOpacity onPress={ProfileInfoHandle} style={[styles.PagePButtonInfos, infomatchselected === 1 && styles.PagePButtonInfoMatchSelected]}>
+              <Text style={[styles.textbutton, infomatchselected === 1 && styles.textbuttonSelected]}>Infos</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={ProfileMatchHandle} style={[styles.PagePButtonMatch, infomatchselected === 2 && styles.PagePButtonInfoMatchSelected]}>
+              <Text style={[styles.textbutton, infomatchselected === 2 && styles.textbuttonSelected]}>Match</Text> 
+            </TouchableOpacity>              
+          </View>
+
+          {/* Body page profile :  */}
+          <View style={styles.ContainerBodyProfile}>
+              {viewNumber === 1 ? ( 
+                // affichage view 1 :
+                <View style={styles.ViewInfo}>
+                  <Text>View Fille 1</Text>
+                </View>
+                ) : (
+                // affichage view 2 :
+                <View style={styles.ViewMatch}>           
+                  <Text style={styles.TitleViewMatch}>Match à venir</Text>
+                  <View style={styles.MatchOngoingContainer}>
+                    {/* scroll view des matchs ongoing  */}
+                    <ScrollView
+                      horizontal
+                      contentContainerStyle={styles.scrollViewContainer}
+                      showsHorizontalScrollIndicator={false}
+                      snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
+                      decelerationRate="fast"
+                      >
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 1</Text>
+                      </View>
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 2</Text>
+                      </View>
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 3</Text>
+                      </View>
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 4</Text>
+                      </View>
+                    </ScrollView>
+
+                  </View>
+                  <Text style={styles.TitleViewMatch}>Match terminés</Text>
+                  <View style={styles.MatchDoneContainer}>
+                    <ScrollView
+                      horizontal
+                      contentContainerStyle={styles.scrollViewContainer}
+                      showsHorizontalScrollIndicator={false}
+                      snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
+                      decelerationRate="fast"
+                      >
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 1</Text>
+                      </View>
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 2</Text>
+                      </View>
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 3</Text>
+                      </View>
+                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                        <Text>View Fille 4</Text>
+                      </View>
+                    </ScrollView>
+                  </View>
+                </View>  
+                )}
+          </View>
+
+
+
+       </View>
+
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightgreen' }}>
-          <Text>Page Tournois</Text>
+          
         </View>
+
+
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'salmon' }}>
-          <Text>Page Equipe</Text>
+          
         </View>
+
       </Swiper>
       {/* //====================== SWIPER DEF END ====================== */}
       {/* //====================== BOTTOM BAR ====================== */}
@@ -217,6 +321,111 @@ const styles = StyleSheet.create({
     position: "relative",
   },
 
+  PageProfile: {
+    backgroundColor: "rgba(247,247,247,1)",
+    flex : 1,
+    alignItems: "center",
+  },
+
+  PagePTopContainer: {
+    width: wp("100%"),
+    height:hp("20%"),
+    backgroundColor: "rgba(235,235,235,1)",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: "center",
+  },
+
+  PagePButtonInfoMatch: {
+    backgroundColor: "rgba(235,235,235,1)",
+    height: hp("5%"),
+    width: wp("80%"),
+    marginTop: hp("2%"),
+    borderRadius: hp("2%"),
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent:"center",
+  },
+
+  PagePButtonInfos: {
+    width: "45%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight:"1.6%",
+    borderRadius: hp("1.3%"),
+  },
+
+  PagePButtonMatch:{
+    width: "45%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "1.6%",
+    borderRadius: hp("1.3%"),
+  },
+
+  PagePButtonInfoMatchSelected: {
+    backgroundColor: "rgba(253,196,51,1)",
+  },
+
+  textbutton: {
+    fontFamily: "Poppins-Medium",
+    color: "rgba(119,126,144,1)",
+  },
+
+  textbuttonSelected: {
+    color: "black",
+    fontFamily: "Poppins-SemiBold",
+  },
+
+  ContainerBodyProfile: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%"
+  },
+
+  ViewMatch: {
+    width: "100%",
+    height: "100%",
+    padding: wp("6%"),
+  },
+
+  TitleViewMatch: {
+    fontFamily: "Poppins-SemiBold",
+    fontSize: hp("2.5%"),
+  },
+
+  MatchOngoingContainer: {
+    width: "100%",
+    height : hp("17%"),
+    marginTop: hp("2%"),
+    marginBottom: hp("2%"),
+  },
+
+  scrollViewContainer: {
+    alignItems: 'center',
+  },
+
+  viewFille: {
+    backgroundColor: 'rgba(235,235,235,0.8)',
+    borderRadius: hp("4%"),
+    height: "100%",
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: "rgba(119,126,144,1)"
+  },
+
+  MatchDoneContainer: {
+    width: "100%",
+    height : hp("17%"),
+    marginTop: hp("2%"),
+    marginBottom: hp("2%"),   
+  },
+  
   menuBar: {
     position: "absolute",
     bottom: 0,

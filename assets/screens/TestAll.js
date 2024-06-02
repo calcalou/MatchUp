@@ -1,85 +1,52 @@
-import React, { useState } from 'react';
-import { Animated, Easing, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
 
-export default function App() {
-  const [showButtons, setShowButtons] = useState(false);
-  const opacity = new Animated.Value(0);
-
-  const fadeIn = () => {
-    setShowButtons(true);
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 500,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const fadeOut = () => {
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 500,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start(() => setShowButtons(false));
-  };
-
-  const toggleButtons = () => {
-    if (!showButtons) {
-      fadeIn();
-    } else {
-      fadeOut();
-    }
-  };
+const App = () => {
+  const viewWidth = Dimensions.get('window').width - 40;
 
   return (
     <View style={styles.container}>
-      {showButtons && (
-        <Animated.View style={[styles.buttonContainer, { opacity }]}>
-          <TouchableOpacity style={styles.smallButton}>
-            <Text style={styles.buttonText}>Button 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallButton}>
-            <Text style={styles.buttonText}>Button 2</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallButton}>
-            <Text style={styles.buttonText}>Button 3</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      )}
-      <TouchableOpacity style={styles.mainButton} onPress={toggleButtons}>
-        <Text style={styles.buttonText}>Main Button</Text>
-      </TouchableOpacity>
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.scrollViewContainer}
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
+        decelerationRate="fast"
+      >
+        <View style={[styles.viewFille, { width: viewWidth }]}>
+          <Text>View Fille 1</Text>
+        </View>
+        <View style={[styles.viewFille, { width: viewWidth }]}>
+          <Text>View Fille 2</Text>
+        </View>
+        <View style={[styles.viewFille, { width: viewWidth }]}>
+          <Text>View Fille 3</Text>
+        </View>
+        <View style={[styles.viewFille, { width: viewWidth }]}>
+          <Text>View Fille 4</Text>
+        </View>
+      </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    position: 'absolute',
-    top: 100,
-    width: '100%',
+  scrollViewContainer: {
+    alignItems: 'center',
   },
-  mainButton: {
-    backgroundColor: 'orange',
-    padding: 15,
-    borderRadius: 10,
-  },
-  smallButton: {
-    backgroundColor: 'blue',
-    padding: 10,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+  viewFille: {
+    backgroundColor: 'lightgray',
+    borderRadius: 5,
+    height: 250,
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
-  
+
+export default App;
