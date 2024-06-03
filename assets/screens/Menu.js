@@ -177,8 +177,38 @@ function Menu(props) {
       >
 
         <View style={styles.PageProfile}>
-          <View style={styles.PagePTopContainer}>
-          </View>
+          {viewNumber === 1 ? (
+            // AFFICHAGE TOP VIEW INFO
+            <View style={styles.PagePTopContainerInfo}>
+              <View style={styles.PagepProfilePictureInfoContainer}>
+                <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureInfo}></Image>
+              </View>
+              <Text style={styles.PagepNameUserInfo}>#NOM USER</Text>
+              <View style={styles.StatsProfileInfoContainer}>
+                <Text style={styles.TextSatsInfoProfile}>
+                  <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoTrophy.png")} resizeMode="contain"></Image> 
+                  Points : #X
+                 </Text>
+                <Text style={styles.TextSatsInfoProfile}>
+                  <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoClassement.png")} resizeMode="contain"></Image> 
+                  Rang : #X
+                </Text>
+                <Text style={styles.TextSatsInfoProfile}>
+                  <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoReputation.png")} resizeMode="contain"></Image> 
+                  Réputation : #X
+                </Text>
+              </View>
+            </View>
+          ) : (
+            // AFFICHAGE TOP VIEW MATCH
+            <View style={styles.PagePTopContainerMatch}>
+              <View style={styles.PagepProfilePictureMatchContainer}>
+                <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureMatch}></Image>
+              </View>
+              <Text style={styles.PagepNameUserMatch}>#NOM USER</Text>
+
+            </View>
+          )}
 
           {/* Two button switch : */}
           <View style={styles.PagePButtonInfoMatch}>
@@ -193,12 +223,12 @@ function Menu(props) {
           {/* Body page profile :  */}
           <View style={styles.ContainerBodyProfile}>
               {viewNumber === 1 ? ( 
-                // affichage view 1 :
+                // affichage view INFO :
                 <View style={styles.ViewInfo}>
                   <Text>View Fille 1</Text>
                 </View>
                 ) : (
-                // affichage view 2 :
+                // affichage view MATCH:
                 <View style={styles.ViewMatch}>           
                   <Text style={styles.TitleViewMatch}>Match à venir</Text>
                   <View style={styles.MatchOngoingContainer}>
@@ -251,8 +281,6 @@ function Menu(props) {
                 </View>  
                 )}
           </View>
-
-
 
        </View>
 
@@ -315,25 +343,26 @@ function Menu(props) {
 }
 
 const styles = StyleSheet.create({
+  
+  // === COMMUN ===
   container: {
     flex: 1,
     backgroundColor: "#fff",
     position: "relative",
-  },
+  }, 
 
+  // === PAGE PROFILE ===
   PageProfile: {
-    backgroundColor: "rgba(247,247,247,1)",
+    backgroundColor: "white", //rgba(247,247,247,1)
     flex : 1,
     alignItems: "center",
   },
 
-  PagePTopContainer: {
-    width: wp("100%"),
-    height:hp("20%"),
-    backgroundColor: "rgba(235,235,235,1)",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    alignItems: "center",
+  ContainerBodyProfile: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%"
   },
 
   PagePButtonInfoMatch: {
@@ -345,24 +374,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent:"center",
-  },
-
-  PagePButtonInfos: {
-    width: "45%",
-    height: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight:"1.6%",
-    borderRadius: hp("1.3%"),
-  },
-
-  PagePButtonMatch:{
-    width: "45%",
-    height: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: "1.6%",
-    borderRadius: hp("1.3%"),
   },
 
   PagePButtonInfoMatchSelected: {
@@ -379,11 +390,121 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-SemiBold",
   },
 
-  ContainerBodyProfile: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: "100%"
+  // ++INFO SECTION++
+  // -TOP SECTION-
+  PagePTopContainerInfo: {
+    width: wp("100%"),
+    height:hp("30%"),
+    backgroundColor: "rgba(235,235,235,1)",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: "center",
+  },
+
+  PagepProfilePictureInfoContainer: {
+    height: hp("15%"),
+    width: hp("15%"),
+    borderRadius: hp("7.5%"),
+    backgroundColor: "white",
+    marginTop: hp("5%"),
+    justifyContent: "center",
+    alignItems: "center",
+
+    borderRightColor: "rgba(253,196,51,1)",
+    borderBottomColor: "rgba(253,196,51,1)", 
+    borderColor: "rgba(235,235,235,1)",
+    borderWidth: 4,
+  },
+
+  PagepProfilePictureInfo: {
+    height: "90%",
+    width: "90%",
+    borderRadius: 100,
+  },   
+
+  PagepNameUserInfo: {
+    marginTop: "3%",
+    fontFamily: "Poppins-SemiBold",
+    fontSize: wp("5.5%"),
+  },
+
+  StatsProfileInfoContainer : {
+    width: "80%",
+    height:"10%",
+    marginTop:"2%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems:"center"
+  },
+
+  TextSatsInfoProfile: {
+    fontFamily: "Poppins-Medium",
+    marginHorizontal: "2.5%",
+  },
+
+  IcoTrophyStatsInfo: {
+    height:13,
+    width:13,
+    marginRight: 4,
+  },
+
+  // -BODY SECTION INFO-
+
+  PagePButtonInfos: {
+    width: "45%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight:"1.6%",
+    borderRadius: hp("1.3%"),
+  },
+
+  // ++MATCH SECTION++
+  // -TOP SECTION-
+  PagePTopContainerMatch: {
+    width: wp("100%"),
+    height:hp("20%"),
+    backgroundColor: "rgba(235,235,235,1)",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: "center",
+  },
+
+  PagepProfilePictureMatchContainer: {
+    height: hp("10%"),
+    width: hp("10%"),
+    borderRadius: hp("5%"),
+    backgroundColor: "white",
+    marginTop: hp("5%"),
+    justifyContent: "center",
+    alignItems: "center",
+  
+    borderRightColor: "rgba(253,196,51,1)",
+    borderBottomColor: "rgba(253,196,51,1)", 
+    borderColor: "rgba(235,235,235,1)",
+    borderWidth: 4,
+  },
+
+  PagepProfilePictureMatch: {
+    height: "90%",
+    width: "90%",
+    borderRadius: 100,
+  }, 
+
+  PagepNameUserMatch: {
+    marginTop: "3%",
+    fontFamily: "Poppins-SemiBold",
+    fontSize: wp("4.5%"),
+  },
+
+  // -BODY SECTION MATCH-
+  PagePButtonMatch:{
+    width: "45%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "1.6%",
+    borderRadius: hp("1.3%"),
   },
 
   ViewMatch: {
@@ -425,7 +546,8 @@ const styles = StyleSheet.create({
     marginTop: hp("2%"),
     marginBottom: hp("2%"),   
   },
-  
+
+  // === BOTTOM BAR MENU ===
   menuBar: {
     position: "absolute",
     bottom: 0,

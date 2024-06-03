@@ -1,51 +1,60 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 
 const App = () => {
-  const viewWidth = Dimensions.get('window').width - 40;
-
   return (
-    <View style={styles.container}>
-      <ScrollView
-        horizontal
-        contentContainerStyle={styles.scrollViewContainer}
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
-        decelerationRate="fast"
-      >
-        <View style={[styles.viewFille, { width: viewWidth }]}>
-          <Text>View Fille 1</Text>
-        </View>
-        <View style={[styles.viewFille, { width: viewWidth }]}>
-          <Text>View Fille 2</Text>
-        </View>
-        <View style={[styles.viewFille, { width: viewWidth }]}>
-          <Text>View Fille 3</Text>
-        </View>
-        <View style={[styles.viewFille, { width: viewWidth }]}>
-          <Text>View Fille 4</Text>
-        </View>
-      </ScrollView>
-    </View>
+    <ScrollView 
+      showsVerticalScrollIndicator={false}
+      style={styles.scrollView}>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 1</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 2</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 3</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 4</Text>
+      </View>
+      <Text>OUI</Text>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 5</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 6</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 7</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 8</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 9</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>Item 10</Text>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingTop: 50,
   },
-  scrollViewContainer: {
-    alignItems: 'center',
-  },
-  viewFille: {
+  item: {
+    height: 100,
     backgroundColor: 'lightgray',
-    borderRadius: 5,
-    height: 250,
-    margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 10,
+  },
+  text: {
+    fontSize: 20,
   },
 });
 
