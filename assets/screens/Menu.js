@@ -26,6 +26,9 @@ import { useCallback } from "react"; // import Font
 import Swiper from 'react-native-swiper';
 import { InterfaceOrientation } from "react-native-reanimated";
 
+import { BarChart } from 'react-native-chart-kit'; //Import Tableau Stats
+
+
 // ================== DEF FONCTION LOCAL ==================
 
 // ================== DEF CONST ==================
@@ -53,9 +56,48 @@ function Menu(props) {
   // Initialisez l'état pour gérer quelle vue fille est affichée (1 ou 2)
   const [viewNumber, setViewNumber] = useState(1);
 
-  // === DEF SCROLL VIEW ===
+  // === DEF SCROLL VIEW HORIZONTAL MATCH===
   const viewWidth = Dimensions.get('window').width - wp("15%");
+  
+  // === DEF TABLE STATS USER ===
+  const UserDataElo = {
+    // labels: ["", "", "", "", "", ""],
+    labels: ["Foot",
+             "Basket",
+             "Volley",
+             "Padel",
+             "Badminton",
+             "Squash"
+            ],
+    datasets: [
+      {
+        data: [1100, 1700, 2000, 1500, 1800, 980],
+        colors: [
+          () => `#71B77B`,
+          () => `#F59172`,
+          () => `#FDC433`,
+          () => `#4574F4`,
+          () => `#1DB6A8`,
+          () => `#999896`,
+      ]
+      }
+    ]
+  };
 
+  const chartConfigStyle = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    barPercentage: 0.5,
+
+    fillShadowGradient: `rgba(1, 122, 205, 1)`,
+
+    propsForLabels: {
+      fontFamily: 'Poppins-SemiBold',
+    },
+
+    decimalPlaces: 0,
+  };
 
   //====================== DEF SWIPER ======================
   const swiperRef = useRef(null);
@@ -175,7 +217,7 @@ function Menu(props) {
         onScrollBeginDrag={onScrollBeginDrag}
         bounces={false}
       >
-
+        {/* ==== PAGE PROFIL ==== */}
         <View style={styles.PageProfile}>
           {viewNumber === 1 ? (
             // AFFICHAGE TOP VIEW INFO
@@ -220,36 +262,61 @@ function Menu(props) {
             </TouchableOpacity>              
           </View>
 
-          {/* Body page profile :  */}
+          {/* Body page profile INFO/MATCH :  */}
           <View style={styles.ContainerBodyProfile}>
               {viewNumber === 1 ? ( 
-                // affichage view INFO :
-                <View style={styles.ViewInfo}>
-                  <Text>View Fille 1</Text>
+                // affichage view BODY INFO :
+                <View style={styles.ContainerBodyProfileInfo}>
+                  <ScrollView 
+                    showsVerticalScrollIndicator={false}
+                    style={styles.scrollViewverticalInfo}>
+                    <Text style={styles.TitleProfileInfo}>Statistique joueur</Text>
+                    <View style={styles.StatsTableContainer}>
+                      <BarChart
+                        style={styles.TableStatsProfileInfo}
+                        data={UserDataElo}
+                        width={wp("85%")}
+                        height={hp("40%")}
+                        chartConfig={chartConfigStyle}
+                        verticalLabelRotation={-90}
+                        fromZero
+                        showBarTops={false}
+                        withInnerLines={false}
+                        yAxisSuffix={" 🏆"}
+                        withCustomBarColorFromData={true}
+                      />
+                    </View>
+                    <Text style={styles.TitleProfileInfo}>Équipes</Text>
+                    <View style={styles.ActualTeamBoxProfileContainer}>
+                      <View style={styles.ActualTeamBoxProfile}>
+
+                      </View>
+                    </View>
+                  </ScrollView>                 
                 </View>
                 ) : (
-                // affichage view MATCH:
+                // affichage view BODY MATCH:
                 <View style={styles.ViewMatch}>           
                   <Text style={styles.TitleViewMatch}>Match à venir</Text>
                   <View style={styles.MatchOngoingContainer}>
                     {/* scroll view des matchs ongoing  */}
                     <ScrollView
                       horizontal
-                      contentContainerStyle={styles.scrollViewContainer}
+                      contentContainerStyle={styles.scrollViewHorizontalContainerMatch}
                       showsHorizontalScrollIndicator={false}
                       snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
                       decelerationRate="fast"
                       >
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 1</Text>
                       </View>
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 2</Text>
                       </View>
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 3</Text>
                       </View>
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 4</Text>
                       </View>
                     </ScrollView>
@@ -259,21 +326,21 @@ function Menu(props) {
                   <View style={styles.MatchDoneContainer}>
                     <ScrollView
                       horizontal
-                      contentContainerStyle={styles.scrollViewContainer}
+                      contentContainerStyle={styles.scrollViewHorizontalContainerMatch}
                       showsHorizontalScrollIndicator={false}
                       snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
                       decelerationRate="fast"
                       >
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 1</Text>
                       </View>
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 2</Text>
                       </View>
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 3</Text>
                       </View>
-                      <View style={[styles.viewFille, { width: viewWidth }]}>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
                         <Text>View Fille 4</Text>
                       </View>
                     </ScrollView>
@@ -281,14 +348,17 @@ function Menu(props) {
                 </View>  
                 )}
           </View>
+          
 
-       </View>
-
+        
+       </View> 
+        {/* ==== FIN PAGE PROFIL ==== */}
+        {/* ==== PAGE TOURNOIS ==== */}
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightgreen' }}>
           
         </View>
 
-
+        {/* ==== PAGE EQUIPE ==== */}
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'salmon' }}>
           
         </View>
@@ -459,6 +529,53 @@ const styles = StyleSheet.create({
     borderRadius: hp("1.3%"),
   },
 
+  ContainerBodyProfileInfo: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    // backgroundColor: "lightgray",
+  },
+
+  scrollViewverticalInfo: {
+    flex: 1,
+    paddingTop: hp("3%"),
+    width: "100%",
+  },
+
+  StatsTableContainer: {
+    // fontFamily:"Poppins-Light",
+  },  
+
+  TableStatsProfileInfo: {
+    alignItems:"center"
+  },
+
+  TitleProfileInfo: {
+    fontSize: hp("2.2%"),
+    fontFamily: "Poppins-SemiBold",
+    marginBottom: hp("2%"),
+    marginLeft: wp("4%"),
+  },
+
+  ActualTeamBoxProfileContainer: {
+    height: hp("40%"),
+    width:"100%",
+    alignItems: "center",
+  },
+
+  ActualTeamBoxProfile: {
+    width: "80%",
+    height: "55%",
+    backgroundColor: "rgba(248, 248, 248, 1)",
+    borderRadius: wp("5%"),
+
+    // shadow-box proprieties
+    shadowColor: 'black',
+    shadowOffset: {width: 5, height: 9},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+
   // ++MATCH SECTION++
   // -TOP SECTION-
   PagePTopContainerMatch: {
@@ -525,11 +642,11 @@ const styles = StyleSheet.create({
     marginBottom: hp("2%"),
   },
 
-  scrollViewContainer: {
+  scrollViewHorizontalContainerMatch: {
     alignItems: 'center',
   },
 
-  viewFille: {
+  scrollViewHorizontalContainerMatchFille: {
     backgroundColor: 'rgba(235,235,235,0.8)',
     borderRadius: hp("4%"),
     height: "100%",

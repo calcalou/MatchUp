@@ -1,61 +1,45 @@
 import React from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { BarChart } from 'react-native-chart-kit';
+import { Dimensions, View } from 'react-native';
+
+const screenWidth = Dimensions.get("window").width;
+
+const datas = {
+  labels: ["Foot", "Basket", "Volley", "Padel", "Badminton", "Squash"],
+  datasets: [
+    {
+      data: [1100, 1700, 2000, 1500, 1800, 900],
+    }
+  ]
+};
+
+const chartConfig = {
+  backgroundGradientFrom: "#fff",
+  backgroundGradientTo: "#fff",
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  barPercentage: 0.5,
+  fillShadowGradient: `rgba(0, 255, 0, 0)`,
+  fillShadowGradientOpacity: 0,
+};
 
 const App = () => {
   return (
-    <ScrollView 
-      showsVerticalScrollIndicator={false}
-      style={styles.scrollView}>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 1</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 2</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 3</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 4</Text>
-      </View>
-      <Text>OUI</Text>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 5</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 6</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 7</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 8</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 9</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>Item 10</Text>
-      </View>
-    </ScrollView>
+    <View>
+      <BarChart
+        style={{
+          marginVertical: 8,
+          borderRadius: 16,
+        }}
+        data={datas}
+        width={screenWidth}
+        height={220}
+        chartConfig={chartConfig}
+        verticalLabelRotation={30}
+        fromZero
+        yAxisInterval={1} // optional, defaults to 1
+      />
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    paddingTop: 50,
-  },
-  item: {
-    height: 100,
-    backgroundColor: 'lightgray',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  text: {
-    fontSize: 20,
-  },
-});
 
 export default App;
