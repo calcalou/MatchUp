@@ -36,7 +36,7 @@ const IndexMenu = 1; // def n° de page affiché après chargement
 
 function Menu(props) {
 
-  //====================== DEF PROFILE ======================
+  // ====================== DEF PROFILE ====================== 
 
   // === DEF INFO/PROFILE BUTTON ===
   const [infomatchselected, setinfomatchselected] = useState(1);
@@ -60,15 +60,10 @@ function Menu(props) {
   const viewWidth = Dimensions.get('window').width - wp("15%");
   
   // === DEF TABLE STATS USER ===
+
   const UserDataElo = {
     // labels: ["", "", "", "", "", ""],
-    labels: ["Foot",
-             "Basket",
-             "Volley",
-             "Padel",
-             "Badminton",
-             "Squash"
-            ],
+    labels: ["Foot","Basket","Volley","Padel","Badminton","Squash"],
     datasets: [
       {
         data: [1100, 1700, 2000, 1500, 1800, 980],
@@ -95,8 +90,26 @@ function Menu(props) {
     propsForLabels: {
       fontFamily: 'Poppins-SemiBold',
     },
-
     decimalPlaces: 0,
+  };
+
+  //====================== DEF EQUIPE ======================  
+  // Variable qui détermine le nombre de groupes de vues à afficher
+  const numberOfGroups = 23; // Par exemple, cette variable peut être dynamique
+
+  // Fonction pour rendre les groupes de vues en fonction de la variable
+  const renderGroups = () => {
+    let groups = [];
+    for (let i = 0; i < numberOfGroups; i++) {
+      groups.push(
+        <View key={i.toString()} style={styles.MemberBoxProfileContainer}>
+          <View style={styles.MemberBoxProfile}>
+            <Text>{i + 1}</Text>
+          </View>
+        </View>
+      );
+    }
+    return groups;
   };
 
   //====================== DEF SWIPER ======================
@@ -353,16 +366,143 @@ function Menu(props) {
         
        </View> 
         {/* ==== FIN PAGE PROFIL ==== */}
+
+
         {/* ==== PAGE TOURNOIS ==== */}
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightgreen' }}>
           
         </View>
 
         {/* ==== PAGE EQUIPE ==== */}
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'salmon' }}>
-          
-        </View>
+        <View style={styles.PageProfile}>
+          {viewNumber === 1 ? (
+            // AFFICHAGE TOP VIEW INFO
+            <View style={styles.PagePTopContainerInfo}>
+              <View style={styles.PagepProfilePictureInfoContainer}>
+                <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureInfo}></Image>
+              </View>
+              <Text style={styles.PagepNameUserInfo}>#NOM EQUIPE</Text>
+              <View style={styles.StatsProfileInfoContainer}>
+                <Text style={styles.TextSatsInfoProfile}>
+                  <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoTrophy.png")} resizeMode="contain"></Image> 
+                  Points : #X
+                 </Text>
+                <Text style={styles.TextSatsInfoProfile}>
+                  <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoClassement.png")} resizeMode="contain"></Image> 
+                  Rang : #X
+                </Text>
+                <Text style={styles.TextSatsInfoProfile}>
+                  <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoReputation.png")} resizeMode="contain"></Image> 
+                  Réputation : #X
+                </Text>
+              </View>
+            </View>
+          ) : (
+            // AFFICHAGE TOP VIEW MATCH
+            <View style={styles.PagePTopContainerMatch}>
+              <View style={styles.PagepProfilePictureMatchContainer}>
+                <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureMatch}></Image>
+              </View>
+              <Text style={styles.PagepNameUserMatch}>#NOM EQUIPE</Text>
 
+            </View>
+          )}
+
+          {/* Two button switch : */}
+          <View style={styles.PagePButtonInfoMatch}>
+            <TouchableOpacity onPress={ProfileInfoHandle} style={[styles.PagePButtonInfos, infomatchselected === 1 && styles.PagePButtonInfoMatchSelected]}>
+              <Text style={[styles.textbutton, infomatchselected === 1 && styles.textbuttonSelected]}>Infos</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={ProfileMatchHandle} style={[styles.PagePButtonMatch, infomatchselected === 2 && styles.PagePButtonInfoMatchSelected]}>
+              <Text style={[styles.textbutton, infomatchselected === 2 && styles.textbuttonSelected]}>Match</Text> 
+            </TouchableOpacity>              
+          </View>
+
+          {/* Body page profile INFO/MATCH :  */}
+          <View style={styles.ContainerBodyProfile}>
+              {viewNumber === 1 ? ( 
+                // affichage view BODY INFO :
+                <View style={styles.ContainerBodyProfileInfo}>
+                  <ScrollView 
+                    showsVerticalScrollIndicator={false}
+                    style={styles.scrollViewverticalInfo}>
+                    <Text style={styles.TitleProfileInfo}>Statistique equipe</Text>
+                    <View style={styles.StatsTableContainer}>
+                      <BarChart
+                        style={styles.TableStatsProfileInfo}
+                        data={UserDataElo}
+                        width={wp("85%")}
+                        height={hp("40%")}
+                        chartConfig={chartConfigStyle}
+                        verticalLabelRotation={-90}
+                        fromZero
+                        showBarTops={false}
+                        withInnerLines={false}
+                        yAxisSuffix={" 🏆"}
+                        withCustomBarColorFromData={true}
+                      />
+                    </View>
+                    <Text style={styles.TitleProfileInfo}>Joueurs</Text> 
+                    {/* Affichage render en fonction de membre d'equipe : */}
+                    {renderGroups()}
+                  </ScrollView>                 
+                </View>
+                ) : (
+                // affichage view BODY MATCH:
+                <View style={styles.ViewMatch}>           
+                  <Text style={styles.TitleViewMatch}>Match à venir</Text>
+                  <View style={styles.MatchOngoingContainer}>
+                    {/* scroll view des matchs ongoing  */}
+                    <ScrollView
+                      horizontal
+                      contentContainerStyle={styles.scrollViewHorizontalContainerMatch}
+                      showsHorizontalScrollIndicator={false}
+                      snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
+                      decelerationRate="fast"
+                      >
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 1</Text>
+                      </View>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 2</Text>
+                      </View>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 3</Text>
+                      </View>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 4</Text>
+                      </View>
+                    </ScrollView>
+
+                  </View>
+                  <Text style={styles.TitleViewMatch}>Match terminés</Text>
+                  <View style={styles.MatchDoneContainer}>
+                    <ScrollView
+                      horizontal
+                      contentContainerStyle={styles.scrollViewHorizontalContainerMatch}
+                      showsHorizontalScrollIndicator={false}
+                      snapToInterval={viewWidth + 20}  // Ajoutez la marge gauche et droite (10 + 10)
+                      decelerationRate="fast"
+                      >
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 1</Text>
+                      </View>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 2</Text>
+                      </View>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 3</Text>
+                      </View>
+                      <View style={[styles.scrollViewHorizontalContainerMatchFille, { width: viewWidth }]}>
+                        <Text>View Fille 4</Text>
+                      </View>
+                    </ScrollView>
+                  </View>
+                </View>  
+                )}
+          </View>
+       </View>{/* FIN PAGE EQUIPE */}
+                
       </Swiper>
       {/* //====================== SWIPER DEF END ====================== */}
       {/* //====================== BOTTOM BAR ====================== */}
@@ -422,307 +562,334 @@ const styles = StyleSheet.create({
   }, 
 
   // === PAGE PROFILE ===
-  PageProfile: {
-    backgroundColor: "white", //rgba(247,247,247,1)
-    flex : 1,
-    alignItems: "center",
-  },
+    PageProfile: {
+      backgroundColor: "white", //rgba(247,247,247,1)
+      flex : 1,
+      alignItems: "center",
+    },
 
-  ContainerBodyProfile: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: "100%"
-  },
+    ContainerBodyProfile: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: "100%"
+    },
 
-  PagePButtonInfoMatch: {
-    backgroundColor: "rgba(235,235,235,1)",
-    height: hp("5%"),
-    width: wp("80%"),
-    marginTop: hp("2%"),
-    borderRadius: hp("2%"),
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent:"center",
-  },
+    PagePButtonInfoMatch: {
+      backgroundColor: "rgba(235,235,235,1)",
+      height: hp("5%"),
+      width: wp("80%"),
+      marginTop: hp("2%"),
+      borderRadius: hp("2%"),
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent:"center",
+    },
 
-  PagePButtonInfoMatchSelected: {
-    backgroundColor: "rgba(253,196,51,1)",
-  },
+    PagePButtonInfoMatchSelected: {
+      backgroundColor: "rgba(253,196,51,1)",
+    },
 
-  textbutton: {
-    fontFamily: "Poppins-Medium",
-    color: "rgba(119,126,144,1)",
-  },
+    textbutton: {
+      fontFamily: "Poppins-Medium",
+      color: "rgba(119,126,144,1)",
+    },
 
-  textbuttonSelected: {
-    color: "black",
-    fontFamily: "Poppins-SemiBold",
-  },
+    textbuttonSelected: {
+      color: "black",
+      fontFamily: "Poppins-SemiBold",
+    },
 
-  // ++INFO SECTION++
-  // -TOP SECTION-
-  PagePTopContainerInfo: {
-    width: wp("100%"),
-    height:hp("30%"),
-    backgroundColor: "rgba(235,235,235,1)",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    alignItems: "center",
-  },
+    // ++INFO SECTION++
+      // -TOP SECTION-
+        PagePTopContainerInfo: {
+          width: wp("100%"),
+          height:hp("30%"),
+          backgroundColor: "rgba(235,235,235,1)",
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+          alignItems: "center",
+        },
 
-  PagepProfilePictureInfoContainer: {
-    height: hp("15%"),
-    width: hp("15%"),
-    borderRadius: hp("7.5%"),
-    backgroundColor: "white",
-    marginTop: hp("5%"),
-    justifyContent: "center",
-    alignItems: "center",
+        PagepProfilePictureInfoContainer: {
+          height: hp("15%"),
+          width: hp("15%"),
+          borderRadius: hp("7.5%"),
+          backgroundColor: "white",
+          marginTop: hp("5%"),
+          justifyContent: "center",
+          alignItems: "center",
 
-    borderRightColor: "rgba(253,196,51,1)",
-    borderBottomColor: "rgba(253,196,51,1)", 
-    borderColor: "rgba(235,235,235,1)",
-    borderWidth: 4,
-  },
+          borderRightColor: "rgba(253,196,51,1)",
+          borderBottomColor: "rgba(253,196,51,1)", 
+          borderColor: "rgba(235,235,235,1)",
+          borderWidth: 4,
+        },
 
-  PagepProfilePictureInfo: {
-    height: "90%",
-    width: "90%",
-    borderRadius: 100,
-  },   
+        PagepProfilePictureInfo: {
+          height: "90%",
+          width: "90%",
+          borderRadius: 100,
+        },   
 
-  PagepNameUserInfo: {
-    marginTop: "3%",
-    fontFamily: "Poppins-SemiBold",
-    fontSize: wp("5.5%"),
-  },
+        PagepNameUserInfo: {
+          marginTop: "3%",
+          fontFamily: "Poppins-SemiBold",
+          fontSize: wp("5.5%"),
+        },
 
-  StatsProfileInfoContainer : {
-    width: "80%",
-    height:"10%",
-    marginTop:"2%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems:"center"
-  },
+        StatsProfileInfoContainer : {
+          width: "80%",
+          height:"10%",
+          marginTop:"2%",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems:"center"
+        },
 
-  TextSatsInfoProfile: {
-    fontFamily: "Poppins-Medium",
-    marginHorizontal: "2.5%",
-  },
+        TextSatsInfoProfile: {
+          fontFamily: "Poppins-Medium",
+          marginHorizontal: "2.5%",
+        },
 
-  IcoTrophyStatsInfo: {
-    height:13,
-    width:13,
-    marginRight: 4,
-  },
+        IcoTrophyStatsInfo: {
+          height:13,
+          width:13,
+          marginRight: 4,
+        },
 
-  // -BODY SECTION INFO-
+      // -BODY SECTION INFO-
+        PagePButtonInfos: {
+          width: "45%",
+          height: "80%",
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight:"1.6%",
+          borderRadius: hp("1.3%"),
+        },
 
-  PagePButtonInfos: {
-    width: "45%",
-    height: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight:"1.6%",
-    borderRadius: hp("1.3%"),
-  },
+        ContainerBodyProfileInfo: {
+          width: "100%",
+          height: "100%",
+          alignItems: "center",
+          // backgroundColor: "lightgray",
+        },
 
-  ContainerBodyProfileInfo: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    // backgroundColor: "lightgray",
-  },
+        scrollViewverticalInfo: {
+          flex: 1,
+          paddingTop: hp("3%"),
+          width: "100%",
+        },
 
-  scrollViewverticalInfo: {
-    flex: 1,
-    paddingTop: hp("3%"),
-    width: "100%",
-  },
+        StatsTableContainer: {
+          // fontFamily:"Poppins-Light",
+        },  
 
-  StatsTableContainer: {
-    // fontFamily:"Poppins-Light",
-  },  
+        TableStatsProfileInfo: {
+          alignItems:"center"
+        },
 
-  TableStatsProfileInfo: {
-    alignItems:"center"
-  },
+        TitleProfileInfo: {
+          fontSize: hp("2.2%"),
+          fontFamily: "Poppins-SemiBold",
+          marginBottom: hp("2%"),
+          marginLeft: wp("4%"),
+        },
 
-  TitleProfileInfo: {
-    fontSize: hp("2.2%"),
-    fontFamily: "Poppins-SemiBold",
-    marginBottom: hp("2%"),
-    marginLeft: wp("4%"),
-  },
+        ActualTeamBoxProfileContainer: {
+          height: hp("40%"),
+          width:"100%",
+          alignItems: "center",
+        },
 
-  ActualTeamBoxProfileContainer: {
-    height: hp("40%"),
-    width:"100%",
-    alignItems: "center",
-  },
+        ActualTeamBoxProfile: {
+          width: "80%",
+          height: "55%",
+          backgroundColor: "rgba(248, 248, 248, 1)",
+          borderRadius: wp("5%"),
 
-  ActualTeamBoxProfile: {
-    width: "80%",
-    height: "55%",
-    backgroundColor: "rgba(248, 248, 248, 1)",
-    borderRadius: wp("5%"),
+          // shadow-box proprieties
+          shadowColor: 'black',
+          shadowOffset: {width: 5, height: 9},
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
+        },
 
-    // shadow-box proprieties
-    shadowColor: 'black',
-    shadowOffset: {width: 5, height: 9},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
+    // ++MATCH SECTION++
+      // -TOP SECTION-
+        PagePTopContainerMatch: {
+          width: wp("100%"),
+          height:hp("20%"),
+          backgroundColor: "rgba(235,235,235,1)",
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+          alignItems: "center",
+        },
 
-  // ++MATCH SECTION++
-  // -TOP SECTION-
-  PagePTopContainerMatch: {
-    width: wp("100%"),
-    height:hp("20%"),
-    backgroundColor: "rgba(235,235,235,1)",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    alignItems: "center",
-  },
+        PagepProfilePictureMatchContainer: {
+          height: hp("10%"),
+          width: hp("10%"),
+          borderRadius: hp("5%"),
+          backgroundColor: "white",
+          marginTop: hp("5%"),
+          justifyContent: "center",
+          alignItems: "center",
+        
+          borderRightColor: "rgba(253,196,51,1)",
+          borderBottomColor: "rgba(253,196,51,1)", 
+          borderColor: "rgba(235,235,235,1)",
+          borderWidth: 4,
+        },
 
-  PagepProfilePictureMatchContainer: {
-    height: hp("10%"),
-    width: hp("10%"),
-    borderRadius: hp("5%"),
-    backgroundColor: "white",
-    marginTop: hp("5%"),
-    justifyContent: "center",
-    alignItems: "center",
+        PagepProfilePictureMatch: {
+          height: "90%",
+          width: "90%",
+          borderRadius: 100,
+        }, 
+
+        PagepNameUserMatch: {
+          marginTop: "3%",
+          fontFamily: "Poppins-SemiBold",
+          fontSize: wp("4.5%"),
+        },
+
+      // -BODY SECTION MATCH-
+        PagePButtonMatch:{
+          width: "45%",
+          height: "80%",
+          alignItems: "center",
+          justifyContent: "center",
+          marginLeft: "1.6%",
+          borderRadius: hp("1.3%"),
+        },
+
+        ViewMatch: {
+          width: "100%",
+          height: "100%",
+          padding: wp("6%"),
+        },
+
+        TitleViewMatch: {
+          fontFamily: "Poppins-SemiBold",
+          fontSize: hp("2.5%"),
+        },
+
+        MatchOngoingContainer: {
+          width: "100%",
+          height : hp("17%"),
+          marginTop: hp("2%"),
+          marginBottom: hp("2%"),
+        },
+
+        scrollViewHorizontalContainerMatch: {
+          alignItems: 'center',
+        },
+
+        scrollViewHorizontalContainerMatchFille: {
+          backgroundColor: 'rgba(235,235,235,0.8)',
+          borderRadius: hp("4%"),
+          height: "100%",
+          margin: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderWidth: 1,
+          borderColor: "rgba(119,126,144,1)"
+        },
+
+        MatchDoneContainer: {
+          width: "100%",
+          height : hp("17%"),
+          marginTop: hp("2%"),
+          marginBottom: hp("2%"),   
+        },
+  // === FIN PAGE PROFILE ===
+
+  // === PAGE TOURNOIS ===
+  // === FIN PAGE TOURNOIS ===
   
-    borderRightColor: "rgba(253,196,51,1)",
-    borderBottomColor: "rgba(253,196,51,1)", 
-    borderColor: "rgba(235,235,235,1)",
-    borderWidth: 4,
-  },
+  // === PAGE EQUIPE ===
 
-  PagepProfilePictureMatch: {
-    height: "90%",
-    width: "90%",
-    borderRadius: 100,
-  }, 
+    MemberBoxProfileContainer: {
+      height: hp("20%"),
+      width:"100%",
+      alignItems: "center",
+      marginBottom: hp("-4%"),
+    },
 
-  PagepNameUserMatch: {
-    marginTop: "3%",
-    fontFamily: "Poppins-SemiBold",
-    fontSize: wp("4.5%"),
-  },
+    MemberBoxProfile: {
+      width: "80%",
+      height: "55%",
+      backgroundColor: "rgba(248, 248, 248, 1)",
+      borderRadius: wp("5%"),
 
-  // -BODY SECTION MATCH-
-  PagePButtonMatch:{
-    width: "45%",
-    height: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: "1.6%",
-    borderRadius: hp("1.3%"),
-  },
+      // shadow-box proprieties
+      shadowColor: 'black',
+      shadowOffset: {width: 5, height: 9},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+    },
 
-  ViewMatch: {
-    width: "100%",
-    height: "100%",
-    padding: wp("6%"),
-  },
-
-  TitleViewMatch: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: hp("2.5%"),
-  },
-
-  MatchOngoingContainer: {
-    width: "100%",
-    height : hp("17%"),
-    marginTop: hp("2%"),
-    marginBottom: hp("2%"),
-  },
-
-  scrollViewHorizontalContainerMatch: {
-    alignItems: 'center',
-  },
-
-  scrollViewHorizontalContainerMatchFille: {
-    backgroundColor: 'rgba(235,235,235,0.8)',
-    borderRadius: hp("4%"),
-    height: "100%",
-    margin: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: "rgba(119,126,144,1)"
-  },
-
-  MatchDoneContainer: {
-    width: "100%",
-    height : hp("17%"),
-    marginTop: hp("2%"),
-    marginBottom: hp("2%"),   
-  },
+  // === FIN PAGE EQUIPE ===
 
   // === BOTTOM BAR MENU ===
-  menuBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: hp("7%"),
-    backgroundColor: "rgba(65,65,89,1)",
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    menuBar: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: hp("7%"),
+      backgroundColor: "rgba(65,65,89,1)",
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  ProfileContainer:  {
-    backgroundColor: 'white',
-    height: hp("10%"),
-    width: ("33.33%"),
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    ProfileContainer:  {
+      backgroundColor: 'white',
+      height: hp("10%"),
+      width: ("33.33%"),
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  TournoisContainer: {
-    backgroundColor: 'white',
-    height: hp("10%"),
-    width: ("33.33%"),
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    TournoisContainer: {
+      backgroundColor: 'white',
+      height: hp("10%"),
+      width: ("33.33%"),
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  EquipeContainer: {
-    backgroundColor: 'white',
-    height: hp("10%"),
-    width: ("33.33%"),
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    EquipeContainer: {
+      backgroundColor: 'white',
+      height: hp("10%"),
+      width: ("33.33%"),
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  ButtonCircle : {
-    backgroundColor: "white",
-    height: wp("17%"),
-    width: wp("17%"),
-    borderRadius: wp("8.5%"),
-    bottom: hp("3.5%"),
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    ButtonCircle : {
+      backgroundColor: "white",
+      height: wp("17%"),
+      width: wp("17%"),
+      borderRadius: wp("8.5%"),
+      bottom: hp("3.5%"),
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  ButtonIMG: {
-    width : wp("10%"),
-    height : wp("10%"),
-  },
+    ButtonIMG: {
+      width : wp("10%"),
+      height : wp("10%"),
+    },
 
-  ButtonZone: {
-    width : wp("14%"),
-    height: wp("14%"),
-    borderRadius: wp("7%"),
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-  },
+    ButtonZone: {
+      width : wp("14%"),
+      height: wp("14%"),
+      borderRadius: wp("7%"),
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "white",
+    },
 
 });
 
