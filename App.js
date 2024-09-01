@@ -18,7 +18,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Menu" // TestAll
+        initialRouteName="Home" // TestAll
         screenOptions={{
           cardStyle: { flex: 1 },
           gestureEnabled: true,

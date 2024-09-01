@@ -35,18 +35,18 @@ import { BarChart } from 'react-native-chart-kit'; //Import Tableau Stats
 const IndexMenu = 1; // def n° de page affiché après chargement
 
 function Menu(props) {
-
+  
   // ====================== DEF PROFILE ====================== 
 
   // === DEF INFO/PROFILE BUTTON ===
   const [infomatchselected, setinfomatchselected] = useState(1);
 
-  const ProfileInfoHandle = (input) => {
+  const ProfileInfoHandle = () => {
     setinfomatchselected(1);
     setViewNumber(1);
   };
   
-  const ProfileMatchHandle = (input) => {
+  const ProfileMatchHandle = () => {
     setinfomatchselected(2);
     setViewNumber(2);
   };
@@ -67,6 +67,7 @@ function Menu(props) {
     datasets: [
       {
         data: [1100, 1700, 2000, 1500, 1800, 980],
+        // data: [1000, 1000, 1000, 1000, 1000, 1000],
         colors: [
           () => `#71B77B`,
           () => `#F59172`,
@@ -91,6 +92,16 @@ function Menu(props) {
       fontFamily: 'Poppins-SemiBold',
     },
     decimalPlaces: 0,
+  };
+  //====================== DEF TOURNOIS ======================  
+  const [AvenirHistoriqueSelected, setAvenirHistoriqueSelected] = useState(1);
+
+  const AvenirButtonPressed = () => {
+    setAvenirHistoriqueSelected(1);
+  };
+
+  const HistoriqueButtonPressed = () => {
+    setAvenirHistoriqueSelected(2);
   };
 
   //====================== DEF EQUIPE ======================  
@@ -215,6 +226,52 @@ function Menu(props) {
     } 
   }
 
+ // ====================== CONNEXION FORM PHP ======================
+  const [userPseudoFetched, setUserPseudo] = useState(''); // State pour stocker le pseudo
+
+  const RequestUserInfo = async () => {
+    try {
+      const response = await fetch('http://www.discord.re/GetUserInfo.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //body: JSON.stringify({ Email, Password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Récupérer les informations utilisateur
+        const userInfo = data.user;
+
+        const usersexe = data.user.Sexe;
+
+        const userPseudo = data.user.Pseudo;
+        setUserPseudo(userPseudo);
+
+
+        // console.log('sex Info:', usersexe);
+
+        // // Vous pouvez maintenant utiliser ces informations dans votre application
+        // console.log('User Info:', userInfo);
+
+        // Rediriger vers une autre page ou effectuer d'autres actions
+        //props.navigation.navigate("Menu");
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
+    }
+  };
+
+  useEffect(() => {
+    RequestUserInfo();
+  }, []);
+
+
 // Profile joueur / tournois / équipe
   return (
     <View style={styles.container}>
@@ -238,7 +295,7 @@ function Menu(props) {
               <View style={styles.PagepProfilePictureInfoContainer}>
                 <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureInfo}></Image>
               </View>
-              <Text style={styles.PagepNameUserInfo}>#NOM USER</Text>
+              <Text style={styles.PagepNameUserInfo}>{userPseudoFetched}</Text>
               <View style={styles.StatsProfileInfoContainer}>
                 <Text style={styles.TextSatsInfoProfile}>
                   <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoTrophy.png")} resizeMode="contain"></Image> 
@@ -260,7 +317,7 @@ function Menu(props) {
               <View style={styles.PagepProfilePictureMatchContainer}>
                 <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureMatch}></Image>
               </View>
-              <Text style={styles.PagepNameUserMatch}>#NOM USER</Text>
+              <Text style={styles.PagepNameUserMatch}>{userPseudoFetched}</Text>
 
             </View>
           )}
@@ -292,7 +349,7 @@ function Menu(props) {
                         height={hp("40%")}
                         chartConfig={chartConfigStyle}
                         verticalLabelRotation={-90}
-                        fromZero
+                        fromZero={true}
                         showBarTops={false}
                         withInnerLines={false}
                         yAxisSuffix={" 🏆"}
@@ -364,13 +421,200 @@ function Menu(props) {
           
 
         
-       </View> 
+        </View> 
         {/* ==== FIN PAGE PROFIL ==== */}
 
 
         {/* ==== PAGE TOURNOIS ==== */}
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightgreen' }}>
-          
+        <View style={styles.PageTournois}>
+          <View style={styles.PageTopContainerTournois}>
+            <Image // Logo MatchUp
+              source={require("../images/LOGORMVBG.png")}
+              style={styles.LogoPageTournois}
+            ></Image>
+          </View>
+          <View style={styles.PageTournoisMidleBody}>
+            <Text style={styles.TitlePageTournois}>Tournois</Text>
+            <Text style={styles.TextPageTounois}>Participe aux tournois organisés par Match up,</Text>
+            <Text style={styles.TextPageTounois}>
+              <Text style={styles.TextPageTounoisSemiBold}>remporte des points multisport</Text>
+              <Text style={styles.TextPageTounois}> et grimpe</Text>
+            </Text>
+            <Text style={styles.TextPageTounois}>dans le classement !</Text>
+            <View style={styles.ButtonPageTournoisMain}>
+              <TouchableOpacity onPress={AvenirButtonPressed} style={[styles.ButtonPageTournoisMainAvenir, AvenirHistoriqueSelected === 1 && styles.AvenirHistoriquebuttonselected]}>
+                <Text style={styles.TextButtonPageTournoisMain}>À venir</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={HistoriqueButtonPressed} style={[styles.ButtonPageTournoisMainHistorique, AvenirHistoriqueSelected === 2 && styles.AvenirHistoriquebuttonselected]}>
+                <Text style={styles.TextButtonPageTournoisMain}>Historique</Text>
+              </TouchableOpacity>
+            </View>  
+          </View>
+          <ScrollView 
+              showsVerticalScrollIndicator={false}
+              style={styles.PageTournoisverticalBodyScrollView}
+          >
+            <ScrollView
+              horizontal
+              contentContainerStyle={styles.PageTournoisHorizontalBodyScrollView}
+              showsHorizontalScrollIndicator={false}
+              snapToInterval={0}
+              decelerationRate="fast"
+            >
+              <View style={styles.PagetournoisViewScrollFille}> 
+                <LinearGradient 
+                  colors={['#FDC433','#FFEFC8']} // Couleurs du dégradé
+                  start={{ x: 0.5, y: 0 }}
+                  end={{ x: 0.5, y: 1 }}
+                  style={styles.PagetournoisViewScrollFille}
+                >
+                  <Image style={styles.CardBodyTournoisBackGround} source={require("../images/LayerTounoisCard.png")} resizeMode="contain"></Image>
+                  <Text style={styles.TitleCardBodyTournois}>Tournoi</Text>
+                  <Text style={styles.SubTitleCardBodyTournois}>#NOM DU TOURNOIS</Text>
+                  <Text style={styles.SemiSubTitleCardBodyTournois}>Du ## au ## #MONTHS ####</Text>
+                  <Text style={styles.MainTextCardBodyTournois}>Date limite d'inscription : ##/##/####</Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Sports : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#SPORT1 - #SPORT2 - #SPORT3</Text>
+                  </Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Points minimum : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#### points</Text>
+                  </Text>
+
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Équipes inscrites : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>## sur ##</Text>
+                  </Text>
+
+                  <TouchableOpacity style={styles.ButtonInfoBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>En savoir plus</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.ButtonRegisterBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>J'inscris mon équipe</Text>
+                  </TouchableOpacity>
+
+                </LinearGradient> 
+              </View>
+              <View style={styles.PagetournoisViewScrollFille}> 
+                <LinearGradient 
+                  colors={['#FDC433','#FFEFC8']} // Couleurs du dégradé
+                  start={{ x: 0.5, y: 0 }}
+                  end={{ x: 0.5, y: 1 }}
+                  style={styles.PagetournoisViewScrollFille}
+                >
+                  <Image style={styles.CardBodyTournoisBackGround} source={require("../images/LayerTounoisCard.png")} resizeMode="contain"></Image>
+                  <Text style={styles.TitleCardBodyTournois}>Tournoi</Text>
+                  <Text style={styles.SubTitleCardBodyTournois}>#NOM DU TOURNOIS</Text>
+                  <Text style={styles.SemiSubTitleCardBodyTournois}>Du ## au ## #MONTHS ####</Text>
+                  <Text style={styles.MainTextCardBodyTournois}>Date limite d'inscription : ##/##/####</Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Sports : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#SPORT1 - #SPORT2 - #SPORT3</Text>
+                  </Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Points minimum : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#### points</Text>
+                  </Text>
+
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Équipes inscrites : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>## sur ##</Text>
+                  </Text>
+
+                  <TouchableOpacity style={styles.ButtonInfoBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>En savoir plus</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.ButtonRegisterBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>J'inscris mon équipe</Text>
+                  </TouchableOpacity>
+
+                </LinearGradient> 
+              </View>
+              <View style={styles.PagetournoisViewScrollFille}> 
+                <LinearGradient 
+                  colors={['#FDC433','#FFEFC8']} // Couleurs du dégradé
+                  start={{ x: 0.5, y: 0 }}
+                  end={{ x: 0.5, y: 1 }}
+                  style={styles.PagetournoisViewScrollFille}
+                >
+                  <Image style={styles.CardBodyTournoisBackGround} source={require("../images/LayerTounoisCard.png")} resizeMode="contain"></Image>
+                  <Text style={styles.TitleCardBodyTournois}>Tournoi</Text>
+                  <Text style={styles.SubTitleCardBodyTournois}>#NOM DU TOURNOIS</Text>
+                  <Text style={styles.SemiSubTitleCardBodyTournois}>Du ## au ## #MONTHS ####</Text>
+                  <Text style={styles.MainTextCardBodyTournois}>Date limite d'inscription : ##/##/####</Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Sports : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#SPORT1 - #SPORT2 - #SPORT3</Text>
+                  </Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Points minimum : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#### points</Text>
+                  </Text>
+
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Équipes inscrites : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>## sur ##</Text>
+                  </Text>
+
+                  <TouchableOpacity style={styles.ButtonInfoBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>En savoir plus</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.ButtonRegisterBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>J'inscris mon équipe</Text>
+                  </TouchableOpacity>
+
+                </LinearGradient> 
+              </View>
+              <View style={styles.PagetournoisViewScrollFille}> 
+                <LinearGradient 
+                  colors={['#FDC433','#FFEFC8']} // Couleurs du dégradé
+                  start={{ x: 0.5, y: 0 }}
+                  end={{ x: 0.5, y: 1 }}
+                  style={styles.PagetournoisViewScrollFille}
+                >
+                  <Image style={styles.CardBodyTournoisBackGround} source={require("../images/LayerTounoisCard.png")} resizeMode="contain"></Image>
+                  <Text style={styles.TitleCardBodyTournois}>Tournoi</Text>
+                  <Text style={styles.SubTitleCardBodyTournois}>#NOM DU TOURNOIS</Text>
+                  <Text style={styles.SemiSubTitleCardBodyTournois}>Du ## au ## #MONTHS ####</Text>
+                  <Text style={styles.MainTextCardBodyTournois}>Date limite d'inscription : ##/##/####</Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Sports : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#SPORT1 - #SPORT2 - #SPORT3</Text>
+                  </Text>
+                  
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Points minimum : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>#### points</Text>
+                  </Text>
+
+                  <Text style={styles.LigneTexteCardBodyTournois}>
+                    <Text style={styles.TextCardBodyTournois}>Équipes inscrites : </Text>
+                    <Text style={styles.TextBoldCardBodyTournois}>## sur ##</Text>
+                  </Text>
+
+                  <TouchableOpacity style={styles.ButtonInfoBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>En savoir plus</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.ButtonRegisterBodyCardTournois}>
+                    <Text style={styles.ButtonTextBodycardTournois}>J'inscris mon équipe</Text>
+                  </TouchableOpacity>
+
+                </LinearGradient> 
+              </View>
+            </ScrollView>
+          </ScrollView>
         </View>
 
         {/* ==== PAGE EQUIPE ==== */}
@@ -501,7 +745,7 @@ function Menu(props) {
                 </View>  
                 )}
           </View>
-       </View>{/* FIN PAGE EQUIPE */}
+        </View>{/* FIN PAGE EQUIPE */}
                 
       </Swiper>
       {/* //====================== SWIPER DEF END ====================== */}
@@ -805,6 +1049,190 @@ const styles = StyleSheet.create({
   // === FIN PAGE PROFILE ===
 
   // === PAGE TOURNOIS ===
+    PageTournois : {
+      height: hp("100%"),
+      backgroundColor: "rgba(242,242,242,1)",
+      width: wp("100%"),
+      alignItems: "center",
+      justifyContent: "flex-start",
+    },
+
+    //+ Top Section+
+      PageTopContainerTournois : {
+        width: "100%",
+        height: "15%",
+        // backgroundColor: "yellow",
+        alignItems: "center",
+        justifyContent: "flex-end",
+      },
+
+      LogoPageTournois: {
+        width : hp("10%"),
+        height : hp("10%"),
+      },
+
+    //+ Mid Section +
+      PageTournoisMidleBody : {
+        height: "25%",
+        width: "100%",
+        paddingRight: wp("5%"),
+        paddingLeft: wp("5%"),
+        // backgroundColor: "green",
+      },
+
+      TitlePageTournois: {
+        fontFamily: "Poppins-SemiBold",
+        fontSize: hp("4%"),
+      },
+
+      TextPageTounois: {
+        fontFamily: "Poppins-Regular",
+        fontSize: wp("3.4%"),
+      },
+
+      TextPageTounoisSemiBold: {
+        fontFamily: "Poppins-SemiBold",
+        fontSize: wp("3.4%"),
+      },
+
+      ButtonPageTournoisMain: {
+        width : "100%",
+        height: "25%",
+        // backgroundColor : "red",
+        marginTop: hp("2%"),
+        borderRadius : hp("2.7%"),
+        borderWidth: 2,
+        borderColor : "rgba(253,196,51,1)",
+        flexDirection: "row"
+      },
+
+      ButtonPageTournoisMainAvenir : {
+        // backgroundColor : 'red',
+        height: "100%",
+        width : "50%",
+        borderRadius : hp("2.3%"),
+        alignItems: "center",
+        justifyContent: "center",
+      },
+
+      ButtonPageTournoisMainHistorique : {
+        // backgroundColor : 'yellow',
+        height: "100%",
+        width : "50%",
+        borderRadius : hp("2.3%"),
+        alignItems: "center",
+        justifyContent: "center",
+      },
+
+      AvenirHistoriquebuttonselected: {
+        backgroundColor: "rgba(253,196,51,1)",
+      },
+
+      TextButtonPageTournoisMain:{
+        fontFamily : "Poppins-SemiBold",
+        fontSize: "16%"
+      },
+
+    //+ Body/Card Section +
+    
+    PageTournoisverticalBodyScrollView: {
+      paddingLeft: wp("5%"),
+    },
+
+    PageTournoisHorizontalBodyScrollView : {
+      height : hp("70%")
+    },  
+
+    PagetournoisViewScrollFille : {
+      height: "90%",
+      width: wp("75%"),
+      borderRadius: "45%",
+      marginRight : wp("5%")
+    },
+
+    CardBodyTournoisBackGround: {
+      // position: "absolute",
+      height : "65%",
+      width: "65%",
+      opacity: 0.7,
+      marginTop: "-25%",
+      marginBottom: "-20%",
+      marginLeft: "5%",
+    },
+
+    TitleCardBodyTournois:{
+      fontFamily: "Poppins-Bold",
+      color: "white",
+      fontSize: 55,
+      marginLeft: "5%",
+      marginTop: "-20%",
+    },
+
+    SubTitleCardBodyTournois: {
+      fontFamily: "Poppins-SemiBold",
+      color: "white",
+      fontSize: 20,
+      marginLeft: "5%",
+      marginTop: "-3%",
+    },
+
+    SemiSubTitleCardBodyTournois: {
+      fontFamily: "Poppins-Regular",
+      color: "Black",
+      fontSize: 16,
+      marginLeft: "5%",
+      marginTop: "3%"
+    },
+
+    MainTextCardBodyTournois: {
+      fontFamily: "Poppins-SemiBold",
+      marginLeft: "5%",
+      fontSize: 11,
+      marginBottom: "1%"
+    },
+
+    LigneTexteCardBodyTournois: {
+      marginLeft: "5%",
+      marginTop: "2%"
+    },
+
+    TextCardBodyTournois: {
+      fontFamily: "Poppins-Regular",
+      fontSize: 12,
+    },
+
+    TextBoldCardBodyTournois: {
+      fontFamily: "Poppins-Bold",
+      fontSize: 11,
+    },
+
+    ButtonInfoBodyCardTournois: {
+      width: "90%",
+      height: "10%",
+      marginLeft: "5%",
+      marginTop: "5%",
+      borderRadius: "15%",
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+    },
+
+    ButtonRegisterBodyCardTournois: {
+      width: "90%",
+      height: "10%",
+      marginLeft: "5%",
+      marginTop: "5%",
+      borderRadius: "15%",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(253, 196, 51, 1)"
+    },
+
+    ButtonTextBodycardTournois: {
+      fontFamily: "Poppins-SemiBold",
+      fontSize: "14%",
+    },
+    
   // === FIN PAGE TOURNOIS ===
   
   // === PAGE EQUIPE ===

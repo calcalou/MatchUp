@@ -157,7 +157,8 @@ function RegisterII(props) {
     } catch (error) {
       console.error('Error:', error);
       Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
-    }  
+    }
+       
     }
 
   };
