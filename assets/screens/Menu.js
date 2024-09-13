@@ -15,7 +15,7 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+// import { TextInput } from "react-native-gesture-handler";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -24,7 +24,7 @@ import * as SplashScreen from "expo-splash-screen"; // import Font
 import { useCallback } from "react"; // import Font
 
 import Swiper from 'react-native-swiper';
-import { InterfaceOrientation } from "react-native-reanimated";
+// import { InterfaceOrientation } from "react-native-reanimated";
 
 import { BarChart } from 'react-native-chart-kit'; //Import Tableau Stats
 
@@ -36,6 +36,111 @@ const IndexMenu = 1; // def n° de page affiché après chargement
 
 function Menu(props) {
   
+   // ====================== CONNEXION FORM PHP ======================
+
+   // =========== DEF FUNCTION RECUP USER INFO ===========
+   const [userPseudoFetched, setUserPseudoFetched] = useState(''); // State pour stocker le pseudo
+   const RequestUserInfo = async () => {
+     try {
+       const response = await fetch('http://www.discord.re/GetUserInfo.php', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         //body: JSON.stringify({ Email, Password }),
+       });
+       const data = await response.json();
+ 
+       if (data.success) {
+         // Récupérer les informations utilisateur
+         const userInfo = data.user;
+         const usersexe = data.user.Sexe;
+         const userPseudo = data.user.Pseudo;
+         setUserPseudoFetched(userPseudo);
+         // console.log('sex Info:', usersexe);
+         // // Vous pouvez maintenant utiliser ces informations dans votre application
+         // console.log('User Info:', userInfo);
+         // Rediriger vers une autre page ou effectuer d'autres actions
+         //props.navigation.navigate("Menu");
+       } else {
+         Alert.alert('Error', data.message);
+       }
+     } catch (error) {
+       console.error('Error:', error);
+       Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
+     }
+   };
+   useEffect(() => { RequestUserInfo();}, []);
+
+
+   // =========== DEF FUNCTION RECUP USER Trophy ===========
+  const [userTrophyFootFetched, setuserTrophyFootFetched] = useState(''); // State
+  const [userTrophyBasketFetched, setuserTrophyBasketFetched] = useState(''); // State
+  const [userTrophyVolleyFetched, setuserTrophyVolleyFetched] = useState(''); // State
+  const [userTrophyPadelFetched, setuserTrophyPadelFetched] = useState(''); // State
+  const [userTrophyBadmintonFetched, setuserTrophyBadmintonFetched] = useState(''); // State
+  const [userTrophySquashFetched, setuserTrophySquashFetched] = useState(''); // State
+
+  // Fonction pour calculer la somme des trophées
+  const calculateTotalTrophies = () => {
+    const foot = parseInt(userTrophyFootFetched) || 0;
+    const basket = parseInt(userTrophyBasketFetched) || 0;
+    const volley = parseInt(userTrophyVolleyFetched) || 0;
+    const padel = parseInt(userTrophyPadelFetched) || 0;
+    const badminton = parseInt(userTrophyBadmintonFetched) || 0;
+    const squash = parseInt(userTrophySquashFetched) || 0;
+
+    const total = foot + basket + volley + padel + badminton + squash;
+    return total;
+  };
+
+    // Exemple d'utilisation
+    const PointsUser = calculateTotalTrophies();
+
+   const RequestUserTrophy = async () => {
+     try {
+       const response = await fetch('http://www.discord.re/GetUserTrophy.php', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         //body: JSON.stringify({ Email, Password }),
+       });
+       const data = await response.json();
+ 
+       if (data.success) {
+         // Récupérer les informations utilisateur
+         const TrophyFoot = data.user.TrophyFoot;
+         setuserTrophyFootFetched(TrophyFoot);
+
+         const TrophyBasket = data.user.TrophyBasket;
+         setuserTrophyBasketFetched(TrophyBasket);
+
+         const TrophyVolley = data.user.TrophyVolley;
+         setuserTrophyVolleyFetched(TrophyVolley);
+
+         const TrophyPadel = data.user.TrophyPadel;
+         setuserTrophyPadelFetched(TrophyPadel);
+
+         const TrophyBadminton = data.user.TrophyBadminton;
+         setuserTrophyBadmintonFetched(TrophyBadminton);
+
+         const TrophySquash = data.user.TrophySquash;
+         setuserTrophySquashFetched(TrophySquash); 
+         
+         //props.navigation.navigate("Menu");
+       } else {
+         Alert.alert('Error', data.message);
+       }
+     } catch (error) {
+       console.error('Error:', error);
+       Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
+     }
+   };
+   useEffect(() => { RequestUserTrophy();}, []);
+
+
+
   // ====================== DEF PROFILE ====================== 
 
   // === DEF INFO/PROFILE BUTTON ===
@@ -66,8 +171,8 @@ function Menu(props) {
     labels: ["Foot","Basket","Volley","Padel","Badminton","Squash"],
     datasets: [
       {
-        data: [1100, 1700, 2000, 1500, 1800, 980],
-        // data: [1000, 1000, 1000, 1000, 1000, 1000],
+        data: [userTrophyFootFetched, userTrophyBasketFetched, userTrophyVolleyFetched, userTrophyPadelFetched, userTrophyBadmintonFetched, userTrophySquashFetched],
+
         colors: [
           () => `#71B77B`,
           () => `#F59172`,
@@ -226,50 +331,6 @@ function Menu(props) {
     } 
   }
 
- // ====================== CONNEXION FORM PHP ======================
-  const [userPseudoFetched, setUserPseudo] = useState(''); // State pour stocker le pseudo
-
-  const RequestUserInfo = async () => {
-    try {
-      const response = await fetch('http://www.discord.re/GetUserInfo.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        //body: JSON.stringify({ Email, Password }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        // Récupérer les informations utilisateur
-        const userInfo = data.user;
-
-        const usersexe = data.user.Sexe;
-
-        const userPseudo = data.user.Pseudo;
-        setUserPseudo(userPseudo);
-
-
-        // console.log('sex Info:', usersexe);
-
-        // // Vous pouvez maintenant utiliser ces informations dans votre application
-        // console.log('User Info:', userInfo);
-
-        // Rediriger vers une autre page ou effectuer d'autres actions
-        //props.navigation.navigate("Menu");
-      } else {
-        Alert.alert('Error', data.message);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
-    }
-  };
-
-  useEffect(() => {
-    RequestUserInfo();
-  }, []);
 
 
 // Profile joueur / tournois / équipe
@@ -299,7 +360,7 @@ function Menu(props) {
               <View style={styles.StatsProfileInfoContainer}>
                 <Text style={styles.TextSatsInfoProfile}>
                   <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoTrophy.png")} resizeMode="contain"></Image> 
-                  Points : #X
+                  Points : {PointsUser}
                  </Text>
                 <Text style={styles.TextSatsInfoProfile}>
                   <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoClassement.png")} resizeMode="contain"></Image> 

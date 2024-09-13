@@ -37,13 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "Sexe" => $_SESSION["Sexe"],
             "ID" =>  $_SESSION["ID"]
         )
-    );
+    );  
 }
 
 // Envoi de la réponse JSON
 header('Content-Type: application/json');
 echo json_encode($response);
 
+session_start();
 // Fermeture de la connexion à la base de données
 $conn->close();
 ?>
