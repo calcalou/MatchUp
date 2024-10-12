@@ -1,4 +1,3 @@
-<h1 align="center">Hi 👋, I'm Calcalou</h1>
 <h3 align="center">MatchUp Project Init :</h3>
 
 ## Command clone project :
