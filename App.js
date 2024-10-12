@@ -9,6 +9,12 @@ import RegisterIII from './assets/screens/RegisterIII'; // !
 import RegisterIV from './assets/screens/RegisterIV'; // !
 import Menu from './assets/screens/Menu'; // !
 import TestAll from './assets/screens/TestAll'; //!
+import AdminPanel from './assets/screens/AdminPanel'; //!
+import AdminMatch from './assets/screens/AdminMatch'; //!
+import AdminEquipe from './assets/screens/AdminEquipe'; //!
+
+
+
 
 
 const Stack = createStackNavigator();
@@ -18,7 +24,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home" // TestAll
+        initialRouteName="AdminPanel" // TestAll
         screenOptions={{
           cardStyle: { flex: 1 },
           gestureEnabled: true,
@@ -56,6 +62,12 @@ const App = () => {
         <Stack.Screen name="RegisterIII" component={RegisterIII} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterIV" component={RegisterIV} options={{ headerShown: false }} />
         <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+        <Stack.Screen name="AdminPanel" component={AdminPanel} options={{ headerShown: false }} />
+        <Stack.Screen name="AdminMatch" component={AdminMatch} options={{ headerShown: false }} />
+        <Stack.Screen name="AdminEquipe" component={AdminEquipe} options={{ headerShown: false }} />
+
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );

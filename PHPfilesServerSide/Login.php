@@ -55,9 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["AnneeBorn"] = $row["AnneeBorn"];
                 $_SESSION["Sexe"] = $row["Sexe"];
                 $_SESSION["ID"] = $row["ID"];
+                $_SESSION["Status"] = $row["Status"];
 
                 $response["success"] = true;
-                $response["message"] = "Connexion réussie";               
+                $response["message"] = "Connexion réussie";
+                $response["Status"] = $_SESSION["Status"];           
+
 
                 // Réponse de succès avec les données de l'utilisateur
                 // $response = array(

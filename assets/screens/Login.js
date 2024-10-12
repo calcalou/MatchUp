@@ -25,7 +25,7 @@ const BORDER_RADUIS = 5;
 const BORDER_COLOR = "rgba(139,139,139,1)";
 const MARGIN_TOP_SPACE = 3;
 
-function RegisterII(props) {
+function Login(props) {
 
   //====================== DEF FONTS ======================
   const [fontsLoaded, fontError] = Font.useFonts({
@@ -150,7 +150,16 @@ function RegisterII(props) {
 
       if (data.success) {
         // Alert.alert('Success', data.message);
-        props.navigation.navigate("Menu");
+      
+        const UserStatus = data.Status;
+
+        if (UserStatus == 2){
+          props.navigation.navigate("AdminPanel");
+        } 
+        else {
+          props.navigation.navigate("Menu");
+        }
+        
       } else {
         Alert.alert('Error', data.message);
       }
@@ -343,4 +352,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default RegisterII;
+export default Login;

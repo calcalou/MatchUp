@@ -72,7 +72,6 @@ function Menu(props) {
    };
    useEffect(() => { RequestUserInfo();}, []);
 
-
    // =========== DEF FUNCTION RECUP USER Trophy ===========
   const [userTrophyFootFetched, setuserTrophyFootFetched] = useState(''); // State
   const [userTrophyBasketFetched, setuserTrophyBasketFetched] = useState(''); // State
