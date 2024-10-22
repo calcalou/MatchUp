@@ -64,6 +64,11 @@ function Home(props) {
 
     "Poppins-Black": require("../fonts/Poppins/Poppins-Black.ttf"),
     "Poppins-BlackItalic": require("../fonts/Poppins/Poppins-BlackItalic.ttf"),
+
+    //====================== DEF INTER ======================
+
+    "Inter-SemiBold": require("../fonts/Inter/Inter_24pt-SemiBold.ttf"),
+
   });
 
   const onLayoutRootView = useCallback(async () => {if (fontsLoaded || fontError) {await SplashScreen.hideAsync();}}, [fontsLoaded, fontError]);
@@ -81,11 +86,12 @@ function Home(props) {
         <TouchableOpacity
           onPress={() => props.navigation.navigate("Register")}
           style={styles.startFrame}>
-          <Text style={styles.startTxt}>Commencer !</Text>
+          <Text style={styles.startTxt}>Démarrer l'aventure</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.LoginButton} onPress={() => props.navigation.navigate("Login")} /* Button vers login */ >
-          <Text style={styles.LoginText} >Se connecter</Text>
+          <Text style={styles.LoginText} >Tu as déja un compte ?</Text>
+          <Text style={styles.LoginText} >Connectes-toi</Text>
         </TouchableOpacity>
       </ImageBackground>
     </View>
@@ -109,25 +115,26 @@ const styles = StyleSheet.create({
   },
   
   image2: {
+    marginTop: hp("9%"),
     width: 200,
     height: 200,
   },
 
   startFrame: {
-    marginTop: hp("57%"),
-    width: 238,
+    marginTop: hp("46%"),
+    width: wp("65%"),
     height: 44,
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: "rgba(234,234,234,1)",
-    borderRadius: 15,
+    borderRadius: 16,
     alignItems : 'center',
     justifyContent: 'center',
   },
 
   startTxt: {
     color: "rgba(239,235,235,1)",
-    fontSize: 21,
-    fontFamily: "Poppins-Medium",
+    fontSize: 14,
+    fontFamily: "Inter-SemiBold",
   },
 
   LoginButton: { // button vers login 
@@ -139,6 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textDecorationLine: 'underline',
     fontFamily: "Poppins-LightItalic",
+    textAlign: "center"
   },
 
 });

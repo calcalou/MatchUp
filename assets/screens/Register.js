@@ -100,7 +100,10 @@ function Register(props) {
   };
 
   const OnChangePseudo = (text) => {
-    setPseudo(text);
+
+    const filteredText = text.replace(/[^a-zA-Z0-9]/g, '');
+
+    setPseudo(filteredText);
     handlePseudoSelection(0);
   };
 
@@ -114,6 +117,30 @@ function Register(props) {
   };
 
   const OnChangeDay = (text) => {
+    if (text.length == 2) {
+      const numericText = parseInt(text, 10);
+      
+      if (numericText <= 0) {
+        text = ""
+      }
+
+      if (selectedMonth == "Février") {
+        if (numericText >29) {
+          text = ""
+        }
+      }    
+
+      if (selectedMonth == "Avril", selectedMonth == "Juin", selectedMonth == "Septembre", selectedMonth == "Novembre") {
+        if (numericText > 30) {
+          text = ""
+        }
+      }else{
+        if (numericText > 31) {
+          text = ""
+        }
+      }
+    }
+
     setDay(text);
     handleDaySelection(0);
   };
@@ -125,9 +152,21 @@ function Register(props) {
   
   const handleYearSelection = (YearValue) => {
     setYearValidated(YearValue);
+
   };
 
   const OnChangeYear = (text) => {
+
+    if (text.length == 4) {
+      const numericText = parseInt(text, 10);
+      if (numericText > 2020) {
+        text = ""
+      }
+      if (numericText < 1950) {
+        text = ""
+      }
+    }
+
     setYear(text);
     handleYearSelection(0);
   };
@@ -166,45 +205,34 @@ function Register(props) {
 
   //====================== SUMBIT BUTTON NEXT ======================
   const handleSubmit = () => {
+    var isInputokay = true;
 
-    //props.navigation.navigate("RegisterII"); // DEV SHUNT !!
-
-    // Appeler la fonction de vérification
-    //verifierOuvertureDatabase();
-
-    if (gender === 0) {// gender TEST
-      //Alert.alert('Sélectionnez un genre', 'Veuillez sélectionner un genre.');
-    } else if (gender === 1) {// si homme 
-      
-      //Alert.alert('Homme');
-    } else if (gender === 2) {// si femme
-       
-      //Alert.alert('Femme');
-    }
-
-    if (!Pseudo) {
+    if (!Pseudo, Pseudo.length < 5) {
       handlePseudoSelection(1);
       setPseudoPlaceholderColor("rgba(227,119,111,1)");// set red
+      isInputokay = false
     }
     
-    if(!Day){
+    if(!Day, Day.length != 2){
       handleDaySelection(1);
       setDayPlaceholderColor("rgba(227,119,111,1)");// set red
+      isInputokay = false
     }
 
-    if (!Year) {
+    if (!Year, Year.length != 4) {
       handleYearSelection(1);
       setYearPlaceholderColor("rgba(227,119,111,1)");// set red
+      isInputokay = false
     }
 
     if (!selectedMonth) {
       setMonthValue(1);
       setMonthPlaceholderColor("rgba(227,119,111,1)");// set red
+      isInputokay = false
     }
 
-    if (!Pseudo || !Day || !selectedMonth || !Year ) {
+    if (isInputokay == false) {
       Alert.alert("Veuillez remplir tous les champs");
-
     } else if (gender === 0) {
       Alert.alert("Veuillez séléctionner votre genre");
 
@@ -259,7 +287,7 @@ function Register(props) {
               <View style={[styles.DayBox, DayValidated === 1 && styles.EmptyBox]}>
                 <TextInput 
                   style={[styles.DayInput, DayValidated === 1 && styles.EmptyInput]} 
-                  placeholder="JJ" maxLength={2} 
+                  placeholder="01" maxLength={2} 
                   keyboardType="numeric"
                   value={Day}
                   onChangeText={OnChangeDay}
@@ -270,7 +298,7 @@ function Register(props) {
               <View style={[styles.MonthBox, MonthValidated === 1 && styles.EmptyBox]}>
                   <TextInput
                     style={[styles.MonthTextInput, MonthValidated === 1 && styles.EmptyInput]}
-                    placeholder="MM"
+                    placeholder="01"
                     editable={false} // Empêcher l'édition directe du TextInput
                     value={selectedMonth ? selectedMonth : ''}
                     placeholderTextColor={MonthPlaceholderColor}
@@ -302,7 +330,7 @@ function Register(props) {
               <View style={[styles.YearBox, YearValidated === 1 && styles.EmptyBox]}>
                 <TextInput 
                   style={[styles.YearInput, YearValidated === 1 && styles.EmptyInput]} 
-                  placeholder="YYYY" maxLength={4} 
+                  placeholder="2000" maxLength={4} 
                   keyboardType="numeric"
                   value={Year}
                   onChangeText={OnChangeYear}
@@ -481,7 +509,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(150, 150, 150, 0.9)',
+    backgroundColor: 'rgba(50, 50, 50, 0.98)',
     paddingTop: hp('9%'),
   },
 
@@ -492,7 +520,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     width: '100%',
     textAlign: 'center',
-    color: 'rgba(66, 66, 63, 1)',
+    color: 'rgba(180, 180, 180, 1)',
   },
 
   YearBox: { // cadre année
