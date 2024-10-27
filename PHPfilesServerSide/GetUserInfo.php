@@ -25,26 +25,26 @@ $requestData = json_decode(file_get_contents('php://input'), true);
 // Traitement de la requête POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Réponse de succès avec les données de l'utilisateur
-    $response = array(
-        "success" => true,
-        "message" => "Connexion réussie",
-        "user" => array(
-            "Pseudo" => $_SESSION["Pseudo"],
-            "JourBorn" => $_SESSION["JourBorn"],
-            "MoisBorn" => $_SESSION["MoisBorn"],
-            "AnneeBorn" => $_SESSION["AnneeBorn"],
-            "Sexe" => $_SESSION["Sexe"],
-            "ID" =>  $_SESSION["ID"]
-        )
-    );  
+                // Réponse de succès avec les données de l'utilisateur
+                $response = array(
+                    "success" => true,
+                    "message" => "Connexion réussie",
+                    "user" => array(
+                        "Pseudo" => $_SESSION["Pseudo"],
+                        "JourBorn" => $_SESSION["JourBorn"],
+                        "MoisBorn" => $_SESSION["MoisBorn"],
+                        "AnneeBorn" => $_SESSION["AnneeBorn"],
+                        "Sexe" => $_SESSION["Sexe"],
+                        "ID" =>  $_SESSION["ID"],
+                        "IDEquipe" =>  $_SESSION["IDEquipe"],
+                    )
+                );
 }
 
 // Envoi de la réponse JSON
 header('Content-Type: application/json');
 echo json_encode($response);
 
-session_start();
 // Fermeture de la connexion à la base de données
 $conn->close();
 ?>

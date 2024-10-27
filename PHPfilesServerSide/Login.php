@@ -56,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["Sexe"] = $row["Sexe"];
                 $_SESSION["ID"] = $row["ID"];
                 $_SESSION["Status"] = $row["Status"];
+                $_SESSION["IDEquipe"] = $row["IDequipe"];
 
                 $response["success"] = true;
                 $response["message"] = "Connexion réussie";

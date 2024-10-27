@@ -40,6 +40,7 @@ function Menu(props) {
 
    // =========== DEF FUNCTION RECUP USER INFO ===========
    const [userPseudoFetched, setUserPseudoFetched] = useState(''); // State pour stocker le pseudo
+   const [userTeamID, setuserTeamID] = useState(''); // State pour stocker le pseudo
    const RequestUserInfo = async () => {
      try {
        const response = await fetch('http://www.discord.re/GetUserInfo.php', {
@@ -53,10 +54,16 @@ function Menu(props) {
  
        if (data.success) {
          // Récupérer les informations utilisateur
-         const userInfo = data.user;
-         const usersexe = data.user.Sexe;
-         const userPseudo = data.user.Pseudo;
-         setUserPseudoFetched(userPseudo);
+          const userInfo = data.user;
+          const usersexe = data.user.Sexe;
+
+          const userPseudo = data.user.Pseudo;
+          setUserPseudoFetched(userPseudo);
+
+          const userIDteam = data.user.IDEquipe;
+          setuserTeamID(userIDteam);
+
+         //console.log('ID team :', userIDteam);
          // console.log('sex Info:', usersexe);
          // // Vous pouvez maintenant utiliser ces informations dans votre application
          // console.log('User Info:', userInfo);
@@ -71,6 +78,42 @@ function Menu(props) {
      }
    };
    useEffect(() => { RequestUserInfo();}, []);
+   
+   // =========== DEF FUNCTION RECUP USER Team ===========
+   
+   const [userTeamPseudo, setuserTeamPseudo] = useState('');
+   const [userTeamPoint, setuserTeamPoint] = useState('');
+   
+   const RequestUserTeamInfo = async () => {
+    try {
+      const response = await fetch('http://www.discord.re/LoadUserTeam.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //body: JSON.stringify({userTeamID}),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        // Récupérer les informations utilisateur
+        const userTeamPseudo = data.user.Nom;
+        setuserTeamPseudo(userTeamPseudo);
+        //console.log(userTeamPseudo);
+        const userTeamPoint = data.user.Points;
+        setuserTeamPoint(userTeamPoint);
+        //console.log(userTeamPoint);
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
+    }
+  };
+  useEffect(() => { RequestUserTeamInfo();}, []);   
+
+
 
    // =========== DEF FUNCTION RECUP USER Trophy ===========
   const [userTrophyFootFetched, setuserTrophyFootFetched] = useState(''); // State
@@ -685,7 +728,7 @@ function Menu(props) {
               <View style={styles.PagepProfilePictureInfoContainer}>
                 <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureInfo}></Image>
               </View>
-              <Text style={styles.PagepNameUserInfo}>#NOM EQUIPE</Text>
+              <Text style={styles.PagepNameUserInfo}>{userTeamPseudo}</Text>
               <View style={styles.StatsProfileInfoContainer}>
                 <Text style={styles.TextSatsInfoProfile}>
                   <Image style={styles.IcoTrophyStatsInfo} source={require("../images/IcoTrophy.png")} resizeMode="contain"></Image> 

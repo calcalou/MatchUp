@@ -130,7 +130,7 @@ function Register(props) {
         }
       }    
 
-      if (selectedMonth == "Avril", selectedMonth == "Juin", selectedMonth == "Septembre", selectedMonth == "Novembre") {
+      if (selectedMonth == "Avril" || selectedMonth == "Juin" || selectedMonth == "Septembre" || selectedMonth == "Novembre") {
         if (numericText > 30) {
           text = ""
         }
@@ -207,19 +207,19 @@ function Register(props) {
   const handleSubmit = () => {
     var isInputokay = true;
 
-    if (!Pseudo, Pseudo.length < 5) {
+    if (!Pseudo || Pseudo.length < 5) {
       handlePseudoSelection(1);
       setPseudoPlaceholderColor("rgba(227,119,111,1)");// set red
       isInputokay = false
     }
     
-    if(!Day, Day.length != 2){
+    if(!Day || Day.length != 2){
       handleDaySelection(1);
       setDayPlaceholderColor("rgba(227,119,111,1)");// set red
       isInputokay = false
     }
 
-    if (!Year, Year.length != 4) {
+    if (!Year || Year.length != 4) {
       handleYearSelection(1);
       setYearPlaceholderColor("rgba(227,119,111,1)");// set red
       isInputokay = false
@@ -232,8 +232,8 @@ function Register(props) {
     }
 
     if (isInputokay == false) {
-      Alert.alert("Veuillez remplir tous les champs");
-    } else if (gender === 0) {
+      //Alert.alert("Veuillez remplir tous les champs");
+    } else if (gender == 0) {
       Alert.alert("Veuillez séléctionner votre genre");
 
     } else { 
@@ -606,9 +606,9 @@ const styles = StyleSheet.create({
   },
 
   TextButton: { // text du button suivant
-    fontSize: 20,
+    fontSize: 18,
     color: "rgba(65,64,64,100)",
-    fontFamily: "Poppins-Bold"
+    fontFamily: "Poppins-SemiBold"
   },
 
 });

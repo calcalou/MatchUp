@@ -138,14 +138,14 @@ const styles = StyleSheet.create({
   },
 
   LoginButton: { // button vers login 
-    marginTop: hp("5%"),
+    marginTop: hp("3%"),
   },
 
   LoginText: { // text de button vers login
     color: "rgba(234,234,234,1)",
     fontSize: 15,
     textDecorationLine: 'underline',
-    fontFamily: "Poppins-LightItalic",
+    fontFamily: "Inter-SemiBold",
     textAlign: "center"
   },
 
