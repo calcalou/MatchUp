@@ -23,7 +23,7 @@ import { useCallback } from "react"; // import Font
 
 
 
-function /!\ACHANGER(props) {
+function CreatTeam(props) {
 
   //====================== DEF FONTS ======================
   const [fontsLoaded, fontError] = Font.useFonts({
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default /!\ACHANGER;
+export default CreatTeam;

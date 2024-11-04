@@ -12,6 +12,9 @@ import TestAll from './assets/screens/TestAll'; //!
 import AdminPanel from './assets/screens/AdminPanel'; //!
 import AdminMatch from './assets/screens/AdminMatch'; //!
 import AdminEquipe from './assets/screens/AdminEquipe'; //!
+import CreateTeam from './assets/screens/CreateTeam'; //!
+import SearchTeam from './assets/screens/SearchTeam'; //!
+
 
 
 
@@ -65,6 +68,9 @@ const App = () => {
         <Stack.Screen name="AdminPanel" component={AdminPanel} options={{ headerShown: false }} />
         <Stack.Screen name="AdminMatch" component={AdminMatch} options={{ headerShown: false }} />
         <Stack.Screen name="AdminEquipe" component={AdminEquipe} options={{ headerShown: false }} />
+        <Stack.Screen name="CreateTeam" component={CreateTeam} options={{ headerShown: false }} />
+        <Stack.Screen name="SearchTeam" component={SearchTeam} options={{ headerShown: false }} />
+
 
 
 

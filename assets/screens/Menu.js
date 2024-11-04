@@ -721,7 +721,9 @@ function Menu(props) {
         </View>
 
         {/* ==== PAGE EQUIPE ==== */}
-        <View style={styles.PageProfile}>
+        <View style={styles.PageProfile}>          
+          {userTeamID !== 0 ? (
+            <>
           {viewNumber === 1 ? (
             // AFFICHAGE TOP VIEW INFO
             <View style={styles.PagePTopContainerInfo}>
@@ -751,7 +753,6 @@ function Menu(props) {
                 <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureMatch}></Image>
               </View>
               <Text style={styles.PagepNameUserMatch}>#NOM EQUIPE</Text>
-
             </View>
           )}
 
@@ -848,6 +849,42 @@ function Menu(props) {
                 </View>  
                 )}
           </View>
+          </>
+          ) : ( // Si pas d'équipe
+            <View style={styles.EmptyTeamPageContainer}>
+              <Image 
+                source={require("../images/LogoEmptyTeam.png")}
+                resizeMode="contain"
+                style={styles.LogoEmptyTeam}
+              ></Image>
+              <Text style={styles.SubTitleEmptyTeam}>Vous n'avez pas équipe</Text>
+              <Text style={styles.TextEmptyTeam}>Crées-en une ou rejoins celle de tes amis pour</Text>
+              <Text style={styles.TextEmptyTeam}>participer aux compétitions</Text>
+
+              <TouchableOpacity 
+                onPress={() => props.navigation.navigate("SearchTeam")}
+                style={styles.JoinTeamButton}>
+                <Text style={styles.JoinTeamButtonText}>Rejoindre une équipe</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("CreateTeam")}
+                style={styles.CreateTeamButton}>
+                <Text style={styles.CreateTeamButtonText}>Créer mon équipe</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                onPress={ProfileHandle}
+                style={styles.LogoEmptyProfileButton}>
+                <Image 
+                  source={require("../images/LogoEmptyProfile.png")}
+                  resizeMode="contain"
+                  style={styles.LogoEmptyProfile}
+                ></Image>
+              </TouchableOpacity>
+
+            </View>
+          )}
         </View>{/* FIN PAGE EQUIPE */}
                 
       </Swiper>
@@ -1358,6 +1395,83 @@ const styles = StyleSheet.create({
       shadowOffset: {width: 5, height: 9},
       shadowOpacity: 0.2,
       shadowRadius: 3,
+    },
+
+    // + Empty Team + 
+
+    LogoEmptyProfile: {
+      height: hp("5%"),
+      width: hp("5%"),
+
+    },
+
+    LogoEmptyProfileButton: {
+      position : "absolute",
+      top : hp("8%"),
+      left : wp("4%"),
+    },
+
+    LogoEmptyTeam: {
+      // backgroundColor: "red",
+      height: hp("25%"),
+      width: hp("25%"),
+
+    },
+
+    EmptyTeamPageContainer: {
+      height: hp("100%"),
+      width: wp("100%"),
+      //backgroundColor: "red",
+      justifyContent: "center",
+      alignItems: "center",
+
+    },
+
+    SubTitleEmptyTeam: {
+      fontFamily : "Poppins-SemiBold",
+      fontSize: 20,
+      marginTop: hp("4%"),
+      marginBottom: hp("3%"),
+
+    },
+
+    TextEmptyTeam: {
+      fontFamily : "Roboto-Medium",
+      fontSize: 14,
+      color: "rgba(119, 126, 144, 1)",   
+    },
+
+    JoinTeamButton: {
+      height : "6%",
+      width: "80%",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: hp("5%"),
+      backgroundColor: "rgba(51, 51, 51, 1)",
+      borderRadius: 18,
+      
+    },
+
+    JoinTeamButtonText: {
+      color: "rgba(255, 255, 255, 1)",
+      fontSize: 16,
+      fontFamily : "Poppins-SemiBold"
+    },
+
+    CreateTeamButton: {
+      height: "6%",
+      width: "80%",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: hp("1%"),
+      backgroundColor : "rgba(253, 196, 51, 1)",
+      borderRadius: 18,
+    },
+
+    CreateTeamButtonText: {
+      color: "rgba(51, 51, 51, 1)",
+      fontSize: 16,
+      fontFamily : "Poppins-SemiBold"
     },
 
   // === FIN PAGE EQUIPE ===
