@@ -1,0 +1,43 @@
+import React from 'react';
+import { ScrollView, View, StyleSheet } from 'react-native';
+
+export default function App() {
+  return (
+    <View style={styles.ScrollViewContainer}>
+      <ScrollView style={styles.ScrollViewTeam}>
+        <View style={[styles.box, styles.box1]} />
+        <View style={[styles.box, styles.box2]} />
+        <View style={[styles.box, styles.box3]} />
+        <View style={[styles.box, styles.box4]} />
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  ScrollViewContainer: {
+    height : 200,
+    width : 200,
+  },
+  
+  ScrollViewTeam: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  box: {
+    height: 200, // taille de chaque vue
+    marginVertical: 10,
+  },
+  box1: {
+    backgroundColor: 'red',
+  },
+  box2: {
+    backgroundColor: 'blue',
+  },
+  box3: {
+    backgroundColor: 'green',
+  },
+  box4: {
+    backgroundColor: 'purple',
+  },
+});

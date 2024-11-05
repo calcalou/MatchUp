@@ -37,6 +37,33 @@ const IndexMenu = 1; // def n° de page affiché après chargement
 function Menu(props) {
   
    // ====================== CONNEXION FORM PHP ======================
+   
+   // =========== DEF FUNCTION UPDATE UserMemberTeam ===========
+   const UpdateTeamMembers = async () => {
+    try {
+      const response = await fetch('http://www.discord.re/UpdateTeamMembers.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //body: JSON.stringify({ Email, Password }),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        // Récupérer les informations utilisateur
+
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
+    }
+  };
+  useEffect(() => { UpdateTeamMembers();}, []);
+
+
 
    // =========== DEF FUNCTION RECUP USER INFO ===========
    const [userPseudoFetched, setUserPseudoFetched] = useState(''); // State pour stocker le pseudo
@@ -82,6 +109,7 @@ function Menu(props) {
    // =========== DEF FUNCTION RECUP USER Team ===========
    
    const [userTeamPseudo, setuserTeamPseudo] = useState('');
+   const [userTeamMember, setuserTeamMember] = useState('');
    const [userTeamPoint, setuserTeamPoint] = useState('');
    
    const RequestUserTeamInfo = async () => {
@@ -103,6 +131,9 @@ function Menu(props) {
         const userTeamPoint = data.user.Points;
         setuserTeamPoint(userTeamPoint);
         //console.log(userTeamPoint);
+        const userTeamMember = data.user.NbJoueurs;
+        setuserTeamMember(userTeamMember);
+        //console.log(userTeamPoint);
       } else {
         Alert.alert('Error', data.message);
       }
@@ -113,7 +144,37 @@ function Menu(props) {
   };
   useEffect(() => { RequestUserTeamInfo();}, []);   
 
+   // =========== DEF FUNCTION RECUP USER Team Member ===========
 
+
+  const [teamMembers, setTeamMembers] = useState([]);
+  //console.log(teamMembers.length);
+
+  const fetchTeamMembers = async () => {
+    try {
+      const response = await fetch('http://www.discord.re/GetTeamMembers.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        
+        setTeamMembers(data.members);
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', "Une erreur s'est produite. Veuillez réessayer plus tard.");
+    }
+  };
+
+  useEffect(() => {
+    fetchTeamMembers();
+  }, []);
 
    // =========== DEF FUNCTION RECUP USER Trophy ===========
   const [userTrophyFootFetched, setuserTrophyFootFetched] = useState(''); // State
@@ -252,23 +313,24 @@ function Menu(props) {
   };
 
   //====================== DEF EQUIPE ======================  
-  // Variable qui détermine le nombre de groupes de vues à afficher
-  const numberOfGroups = 23; // Par exemple, cette variable peut être dynamique
-
-  // Fonction pour rendre les groupes de vues en fonction de la variable
-  const renderGroups = () => {
-    let groups = [];
-    for (let i = 0; i < numberOfGroups; i++) {
-      groups.push(
-        <View key={i.toString()} style={styles.MemberBoxProfileContainer}>
-          <View style={styles.MemberBoxProfile}>
-            <Text>{i + 1}</Text>
+  //Fonction pour rendre les groupes de vues en fonction de la variable
+  const renderGroupsMemberTeam = () => {
+    if (teamMembers.length > 0) {
+      let groups = [];
+      for (let i = 0; i < userTeamMember; i++) {
+        groups.push(
+          <View key={i.toString()} style={styles.MemberBoxProfileContainer}>
+            <View style={styles.MemberBoxProfile}>
+              <Text>{teamMembers[i].Pseudo}</Text>
+            </View>
           </View>
-        </View>
-      );
+        );
+      }
+      return groups;
     }
-    return groups;
   };
+  
+
 
   //====================== DEF SWIPER ======================
   const swiperRef = useRef(null);
@@ -752,7 +814,7 @@ function Menu(props) {
               <View style={styles.PagepProfilePictureMatchContainer}>
                 <Image source={require("../images/ImageDefaultProfile.png")} resizeMode="cover" style={styles.PagepProfilePictureMatch}></Image>
               </View>
-              <Text style={styles.PagepNameUserMatch}>#NOM EQUIPE</Text>
+              <Text style={styles.PagepNameUserMatch}>{userTeamPseudo}</Text>
             </View>
           )}
 
@@ -792,7 +854,7 @@ function Menu(props) {
                     </View>
                     <Text style={styles.TitleProfileInfo}>Joueurs</Text> 
                     {/* Affichage render en fonction de membre d'equipe : */}
-                    {renderGroups()}
+                    {renderGroupsMemberTeam()}
                   </ScrollView>                 
                 </View>
                 ) : (

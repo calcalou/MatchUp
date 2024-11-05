@@ -1,44 +1,18 @@
 import React from 'react';
-import { BarChart } from 'react-native-chart-kit';
-import { Dimensions, View } from 'react-native';
-
-const screenWidth = Dimensions.get("window").width;
-
-const datas = {
-  labels: ["Foot", "Basket", "Volley", "Padel", "Badminton", "Squash"],
-  datasets: [
-    {
-      data: [1100, 1700, 2000, 1500, 1800, 900],
-    }
-  ]
-};
-
-const chartConfig = {
-  backgroundGradientFrom: "#fff",
-  backgroundGradientTo: "#fff",
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  barPercentage: 0.5,
-  fillShadowGradient: `rgba(0, 255, 0, 0)`,
-  fillShadowGradientOpacity: 0,
-};
+import { Keyboard, TouchableWithoutFeedback, View, ScrollView, TextInput } from 'react-native';
 
 const App = () => {
   return (
-    <View>
-      <BarChart
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-        data={datas}
-        width={screenWidth}
-        height={220}
-        chartConfig={chartConfig}
-        verticalLabelRotation={30}
-        fromZero
-        yAxisInterval={1} // optional, defaults to 1
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={{ flex: 1, padding: 20 }}>
+            <TextInput placeholder="Tape ici..." style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }} />
+            {/* Ajoute d'autres éléments ici */}
+          </View>
+        </ScrollView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

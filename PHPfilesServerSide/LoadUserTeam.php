@@ -37,6 +37,7 @@ if (isset($_SESSION["IDEquipe"])) {
                     "user" => array(
                         "ID" => $row["ID"],
                         "Nom" => $row["Nom"],
+                        "NbJoueurs" => $row["NbJoueurs"],
                         "Points" => $row["Points"],
                         // Add other fields here as needed
                     )
@@ -55,6 +56,7 @@ if (isset($_SESSION["IDEquipe"])) {
 } else {
     $response["message"] = "ID de l'équipe non spécifié dans la session.";
 }
+
 
 // Return the JSON response
 header('Content-Type: application/json');
